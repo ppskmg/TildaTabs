@@ -1,0 +1,725 @@
+<script>
+    $(document).ready(function () {
+
+        function debugBlockTrue(string) {
+            $(string).each(function () {
+                $('#' + $(this).attr("id") + '').prepend(
+                    '<span style="z-index: 2000;position: relative; top: 0;  color: #570570; text-align: center; display:block; border-top: 1px solid #ccc">' +
+                    '#' + $(this).attr("id") + '</span>');
+
+            });
+
+            return;
+        };
+
+        function getString(array) {
+        return array.join(', ');
+    }
+
+        function getBlocksId(array) {
+            let id_block = []
+            for (let block = 0; block < array.length; block++) {
+                id_block.push(array[block][0]);
+            }
+            return id_block;
+        }
+        // function getBlocksId(array) {
+        //     let block_id_array = [];
+        //     for (let block = 0; block < array.length; block++) {
+        //         block_id_array.push(
+        //             array[block][0]);
+        //     }
+        //     return block_id_array;
+        // }
+
+        function getAllBlock(array) {
+            let allblock = getBlocksId(array).join(', ')
+            return allblock;
+        }
+
+
+        function getBlocksIdAcc(array) {
+            let block_id_array_acc = [];
+            for (let block = 0; block < array.length; block++) {
+                block_id_array_acc.push(
+                    array[block][1].split(':')[0]);
+            }
+            return block_id_array_acc;
+        }
+
+
+        function getAllBlockAcc(array) {
+            let allblock_acc = getBlocksIdAcc(array).join(', ')
+            return allblock_acc;
+        }
+
+
+        function getButtonsId(array) {
+            let block_id_array = [];
+            for (let block = 0; block < array.length; block++) {
+                block_id_array.push(
+                    array[block][1]);
+            }
+            return block_id_array;
+        }
+
+
+
+        function getButtonsIdAcc(array) {
+            let block_id_array = [];
+            for (let block = 0; block < array.length; block++) {
+                block_id_array.push(
+                    array[block][1].split(':')[1]);
+            }
+            return block_id_array;
+        }
+
+        function getButtonsActive(array, type_t) {
+            //#rec158925496 .tn-elem[data-elem-id="1580118251333"] .tn-atom'
+            if (type_t == 't1') {
+
+                let buttons_active_t1 = [];
+                for (let block = 0; block < array.length; block++) {
+                    buttons_active_t1.push(
+                        array[block][0] + ' .tn-elem[data-elem-id="' + array[block][1] + '"]');
+                }
+                return buttons_active_t1;
+
+            } else if (type_t.split(':')[0] == 't2') {
+
+                let buttons_active_t2 = [];
+                for (let block = 0; block < array.length; block++) {
+                    buttons_active_t2.push(
+                        type_t.split(':')[1] + ' .tn-elem[data-elem-id="' + array[block][1] + '"]');
+                }
+
+                return buttons_active_t2;
+            } else if (type_t == 'acc') {
+
+
+                let buttons_active_acc = [];
+                for (let block = 0; block < array.length; block++) {
+
+                    buttons_active_acc.push(
+                        array[block][1].split(':')[0] + ' .tn-elem[data-elem-id="' + array[block][1]
+                        .split(':')[1] + '"]');
+                }
+
+                return buttons_active_acc;
+
+            }
+        };
+
+
+        function getActiveButtons(array, type_t) {
+            let active_buttons = getButtonsActive(array, type_t).join(', ')
+            return active_buttons;
+        };
+
+        function getTargetHref(tabsname) {
+            let target = tabsname.target;
+            if (target.className != 'tn-atom') return;
+            let targethref = $(target).attr('href');
+            return targethref;
+        };
+
+        function checkClickAndShowTabs(array, targethref) {
+            let allblock = getAllBlock(array);
+            for (let i = 0; i < array.length; i++) {
+                if (targethref == array[i][2]) {
+                    $(allblock).hide();
+                    $(array[i][0]).show();
+
+                }
+            }
+            return;
+        };
+
+
+        function hideAllBlock(array) {
+            let allblock = getAllBlock(array);
+            $(allblock).hide();
+        };
+
+        function showTargetBlock(array, targethref, tab_name) {
+            let href = '[href="' + targethref + '"]';
+            let add_class = tab_name + '_button_active'
+            for (let i = 0; i < array.length; i++) {
+                if (targethref == array[i][2]) {
+                    $(array[i][0]).show();
+                }
+            }
+        };
+
+        function hideTargetBlock(array, targethref, tab_name) {
+            let href = '[href="' + targethref + '"]';
+            for (let i = 0; i < array.length; i++) {
+                if (targethref == array[i][2]) {
+                    $(array[i][0]).hide();
+                } 
+            }
+        };
+
+
+    function accordionToggle(array, targethref, type_t, tab_name) {
+
+        for (let i = 0; i < array.length; i++) {
+                if (targethref == array[i][2]) {
+                    $(array[i][0]).toggle( 'display' );
+                    //$(href).removeClass(add_class);
+                } else {
+                   
+                    //$(array[i][0]).hide();
+                    
+                }
+            }
+    };
+
+
+    function createTabs(array, string, type_t) {
+        let allblock = getAllBlock(array);
+        let active_buttons = getActiveButtons(array, type_t);
+        //поправить
+        $(allblock).hide();
+
+        if (type_t == 't1') {
+            $(active_buttons).addClass(string + '_button_active');
+            $(array[0][0]).show();
+        } else if (type_t.split(':')[0] == 't2') {
+            $(active_buttons).addClass(string + '_button_base');
+            $(array[0][0]).show();
+        }
+        return;
+    };
+
+
+
+    // generation style
+    function getCssPatch(array, string, type_t) {
+        if (type_t == 't1') {
+            let block_id_t1 = getBlocksId(array)
+            let css_patch_t1 = []
+            for (let i = 0; i < block_id_t1.length; i++) {
+                css_patch_t1.push(block_id_t1[i] + string)
+
+            }
+            let css_patch_t1_string = css_patch_t1.join(', ')
+            return css_patch_t1_string;
+
+        } else if (type_t == 'acc') {
+
+            let block_id_acc = getBlocksIdAcc(array)
+            let css_patch_acc = []
+            for (let i = 0; i < array.length; i++) {
+                css_patch_acc.push(block_id_acc[i] + string)
+            }
+            let css_patch_acc_string = css_patch_acc.join(', ')
+            return css_patch_acc_string;
+        }
+    }
+
+
+    function getCssPatchButton(array, string, type_t) {
+        if (type_t == 't1') {
+            let block_id_t1 = getBlocksId(array)
+            let button_id_t1 = getButtonsId(array)
+            let css_patch_t1 = []
+            for (let i = 0; i < block_id_t1.length; i++) {
+                css_patch_t1.push(block_id_t1[i] + ' [data-elem-id="' + button_id_t1[i] + '"] ' +
+                    string)
+            }
+            let css_patch_t1_string = css_patch_t1.join(', ')
+            return css_patch_t1_string;
+
+        } else if (type_t == 'acc') {
+
+            let block_id_acc = getBlocksIdAcc(array)
+            let button_id_acc = getButtonsIdAcc(array)
+            let css_patch_acc = []
+            for (let i = 0; i < array.length; i++) {
+                css_patch_acc.push(block_id_acc[i] + ' [data-elem-id="' + button_id_acc[i] + '"] ' +
+                    string)
+            }
+            let css_patch_acc_string = css_patch_acc.join(', ')
+            return css_patch_acc_string;
+        }
+    }
+
+
+    function generateStyle(array) {
+        let style = [];
+        for (let i = 0; i < array.length; i++) {
+            style.push(array[i][0] + '{' + array[i][1] + '}\r\n')
+        }
+        return style.join('');
+    }
+
+    function activeButtonT2(array, targethref, name_tab) {
+
+        for (let i = 0; i < array.length; i++) {
+
+            $('[href="' + array[i][2] + '"]').removeClass(name_tab + '_button_active')
+
+            if (targethref == array[i][2]) {
+                $('[href="' + targethref + '"]').addClass(name_tab + '_button_active');
+            }
+
+            ;
+        }
+    }
+
+
+
+    // 
+    // 
+    // CREATE TABS
+    // 
+    // 
+
+    let t_array_acc = [
+    ['#rec158925496', '#rec158931263:1580523222866', '#tab_acc_1'],
+    ['#rec158969503', '#rec158969486:1580523260465', '#tab_acc_2'],
+    ['#rec158977673', '#rec158970897:1580523272629', '#tab_acc_3'],
+    ['#rec158977711', '#rec158970932:1580523283117', '#tab_acc_4'],
+    ['#rec158977733', '#rec158970948:1580523291904', '#tab_acc_5'],
+    ['#rec158977770', '#rec158971204:1580523300492', '#tab_acc_6'],
+    ['#rec158977811', '#rec158971487:1580523310279', '#tab_acc_7'],];
+
+    createTabs(t_array_acc, 'tabs_acc', 'acc');
+    let all_button_acc = getAllBlockAcc(t_array_acc)
+    $(document).on('click', all_button_acc, function (tabs_acc) {
+        //checkClickAndShowTabs(t_array_acc, getTargetHref(tabs_acc))
+        accordionToggle(t_array_acc, getTargetHref(tabs_acc), 'acc', 'tabs_acc')
+    });
+
+
+
+    let t_array_acc_two = [
+    ['#rec159440180', '#rec159772567:1580523222866', '#tab_acc_2__1'],
+    ['#rec159446762', '#rec159772807:1580523222866', '#tab_acc_2__2'],
+    ['#rec159446772', '#rec159772827:1580523222866', '#tab_acc_2__3'],
+    ['#rec159446774', '#rec159772852:1580523222866', '#tab_acc_2__4'],
+    ['#rec159446776', '#rec159772896:1580523222866', '#tab_acc_2__5'],
+    ['#rec159446779', '#rec159772927:1580523222866', '#tab_acc_2__6'],
+    ['#rec159446783', '#rec159772939:1580523222866', '#tab_acc_2__7'],];
+
+    createTabs(t_array_acc_two, 'tabs_acc2', 'acc');
+    let all_button_acc2 = getAllBlockAcc(t_array_acc_two)
+    $(document).on('click', t_array_acc_two, function (tabs_acc2) {
+        //checkClickAndShowTabs(t_array_acc, getTargetHref(tabs_acc))
+        accordionToggle(t_array_acc_two, getTargetHref(tabs_acc2), 'acc', 'tabs_acc2')
+    });
+
+
+    let t_array_acc_three = [
+    ['#rec159452580', '#rec159772961:1580523222866', '#tab_acc_3__1'],
+    ['#rec159456771', '#rec159773002:1580523222866', '#tab_acc_3__2'],
+    ['#rec159456774', '#rec159773013:1580523222866', '#tab_acc_3__3'],
+    ['#rec159456776', '#rec159773589:1580523222866', '#tab_acc_3__4'],
+    ['#rec159456777', '#rec159773631:1580523222866', '#tab_acc_3__5'],];
+
+    createTabs(t_array_acc_three, 'tabs_acc3', 'acc');
+    let all_button_acc3 = getAllBlockAcc(t_array_acc_three)
+    $(document).on('click', t_array_acc_three, function (tabs_acc3) {
+        //checkClickAndShowTabs(t_array_acc, getTargetHref(tabs_acc))
+        accordionToggle(t_array_acc_three, getTargetHref(tabs_acc3), 'acc', 'tabs_acc3')
+    });
+
+    // tabs_1_type_1
+    let block_array = [
+        ['#rec158925496', '1580118251333', '#tab1'],
+        ['#rec158969503', '1580118590356', '#tab2'],
+        ['#rec158977673', '1580118596706', '#tab3'],
+        ['#rec158977711', '1580118601543', '#tab4'],
+        ['#rec158977733', '1580118607956', '#tab5'],
+        ['#rec158977770', '1580118612468', '#tab6'],
+        ['#rec158977811', '1580118629281', '#tab7'],
+    ]
+
+    createTabs(block_array, 'tabs_1', 't1')
+
+    $(document).on('click', getAllBlock(block_array), function (tabs_one) {
+        checkClickAndShowTabs(block_array, getTargetHref(tabs_one))
+
+    });
+
+
+    let step_up_t1 = [
+        ['#rec159440180', '1580118251333', '#step_up_1'],
+        ['#rec159446762', '1580118590356', '#step_up_2'],
+        ['#rec159446772', '1580118596706', '#step_up_3'],
+        ['#rec159446774', '1580118601543', '#step_up_4'],
+        ['#rec159446776', '1580118607956', '#step_up_5'],
+        ['#rec159446779', '1580118612468', '#step_up_6'],
+        ['#rec159446783', '1580118629281', '#step_up_7'],
+    ]
+
+    createTabs(step_up_t1, 'stepup_t1', 't1')
+
+    $(document).on('click', getAllBlock(step_up_t1), function (stepup_t1) {
+        checkClickAndShowTabs(step_up_t1, getTargetHref(stepup_t1))
+
+    });
+
+    let ten_year_t1 = [
+        ['#rec159452580', '1580118251333', '#ten_year_1'],
+        ['#rec159456771', '1580118590356', '#ten_year_2'],
+        ['#rec159456774', '1580118596706', '#ten_year_3'],
+        ['#rec159456776', '1580118601543', '#ten_year_4'],
+        ['#rec159456777', '1580118607956', '#ten_year_5'],
+
+    ]
+    createTabs(ten_year_t1, 'ten_t1', 't1')
+
+    $(document).on('click', getAllBlock(ten_year_t1), function (ten_t1) {
+        checkClickAndShowTabs(ten_year_t1, getTargetHref(ten_t1))
+
+    });
+
+
+    let block_array_t2 = [
+        ['#rec157045395', '1579828375361', '#tabs_t2_1'],
+        ['#rec158063676', '1579828495190', '#tabs_t2_2'],
+        ['#rec158064632', '1579828623343', '#tabs_t2_3'],
+        ['#rec158067911', '1579828659043', '#tabs_t2_4'],
+        ['#rec158069968', '1579828667056', '#tabs_t2_5'],
+
+    ]
+    createTabs(block_array_t2, 'tabs_2', 't2:#rec157044371')
+
+    $(document).on('click', '#rec157044371', function (tabs_t2) {
+        checkClickAndShowTabs(block_array_t2, getTargetHref(tabs_t2))
+        activeButtonT2(block_array_t2, getTargetHref(tabs_t2), 'tabs_2')
+
+    });
+
+    let technology_t2 = [
+        ['#rec157932803', '1580191113400', '#tech_1'],
+        ['#rec159425421', '1579828495190', '#tech_2'],
+        ['#rec159425465', '1579828623343', '#tech_3'],
+        ['#rec159425472', '1579828659043', '#tech_4'],
+
+    ]
+    createTabs(technology_t2, 'tabs_2', 't2:#rec157931544')
+
+    $(document).on('click', '#rec157931544', function (tech_t2) {
+        checkClickAndShowTabs(technology_t2, getTargetHref(tech_t2))
+        activeButtonT2(technology_t2, getTargetHref(tech_t2), 'tech_t2')
+
+    });
+
+
+
+
+
+
+
+
+
+    // 
+    // 
+    // STYLE
+    // 
+    // 
+
+    let tb_pth = [
+        ' [data-elem-type="button"]',
+    ]
+
+    let style_ten_year_t1 = [
+        [getCssPatch(ten_year_t1, ' [href="#ten_year_1"]:before', 't1'),
+            `background-position: -1020px -8px !important;`
+        ],
+
+        [getCssPatch(ten_year_t1, ' [href="#ten_year_2"]:before', 't1'),
+            `background-position: -1086px -8px !important;`
+        ],
+
+        [getCssPatch(ten_year_t1, ' [href="#ten_year_3"]:before', 't1'),
+            `background-position: -1154px -8px !important;`
+        ],
+
+        [getCssPatch(ten_year_t1, ' [href="#ten_year_4"]:before', 't1'),
+            `background-position: -1219px -8px !important;`
+        ],
+
+        [getCssPatch(ten_year_t1, ' [href="#ten_year_5"]:before', 't1'),
+            `background-position: -1286px -8px !important;`
+        ],
+
+    ]
+
+    let style_step_up_t1 = [
+        [getCssPatch(step_up_t1, ' [href="#step_up_1"]:before', 't1'),
+            `background-position: -521px -8px !important;`
+        ],
+
+        [getCssPatch(step_up_t1, ' [href="#step_up_2"]:before', 't1'),
+            `background-position: -595px -8px !important;`
+        ],
+
+        [getCssPatch(step_up_t1, ' [href="#step_up_3"]:before', 't1'),
+            `background-position: -662px -8px !important;`
+        ],
+
+        [getCssPatch(step_up_t1, ' [href="#step_up_4"]:before', 't1'),
+            `background-position: -728px -8px !important;`
+        ],
+
+        [getCssPatch(step_up_t1, ' [href="#step_up_5"]:before', 't1'),
+            `background-position: -796px -8px !important;`
+        ],
+
+        [getCssPatch(step_up_t1, ' [href="#step_up_6"]:before', 't1'),
+            `background-position: -857px -8px !important;`
+        ],
+
+        [getCssPatch(step_up_t1, ' [href="#step_up_7"]:before', 't1'),
+            `background-position: -918px -8px !important;`
+        ],
+
+    ]
+
+    let style_tabs_1 = [
+
+
+        [getCssPatch(block_array, tb_pth, 't1') + ',' +
+            getCssPatch(step_up_t1, tb_pth, 't1') + ',' +
+            getCssPatch(ten_year_t1, tb_pth, 't1') + ',' +
+            getCssPatch(t_array_acc, tb_pth, 't1'),
+            `border-bottom: 2px solid #E5E5E5;
+                    text-align: left !important;
+                    border-left: 7px solid #f4f4f4;`
+        ],
+
+        [getCssPatch(block_array, tb_pth + ':hover', 't1') + ',' +
+            getCssPatch(step_up_t1, tb_pth + ':hover', 't1') + ',' +
+            getCssPatch(ten_year_t1, tb_pth + ':hover', 't1') + ',' +
+            getCssPatch(t_array_acc, tb_pth + ':hover', 't1'),
+            `border-bottom: 0px solid rgba(255,255,255,0.0);
+                    width: 354px !important;
+                    margin-left: -12px;
+                    border-left: 7px solid #05b5ca;
+                    border-radius: 4px;`
+        ],
+
+        [getCssPatch(block_array, tb_pth + ':hover .tn-atom', 't1') + ',' +
+            getCssPatch(step_up_t1, tb_pth + ':hover .tn-atom', 't1') + ',' +
+            getCssPatch(ten_year_t1, tb_pth + ':hover .tn-atom', 't1') + ',' +
+            getCssPatch(t_array_acc, tb_pth + ':hover .tn-atom', 't1'),
+            ` padding-left: 12px;
+                    border-top-right-radius: 4px;
+                    border-bottom-right-radius: 4px;`
+        ],
+
+        [getCssPatch(block_array, tb_pth + ' .tn-atom:hover', 't1') + ',' +
+            getCssPatch(step_up_t1, tb_pth + ' .tn-atom:hover', 't1') + ',' +
+            getCssPatch(ten_year_t1, tb_pth + ' .tn-atom:hover', 't1') + ',' +
+            getCssPatch(t_array_acc, tb_pth + ' .tn-atom:hover', 't1'),
+            ` background-color: #fff !important;`
+        ],
+
+[getCssPatch(block_array, tb_pth + ' .tn-atom:before', 't1') + ', ' + getCssPatch(block_array, tb_pth + ':hover .tn-atom:before', 't1') + ',' + getCssPatch(step_up_t1, tb_pth + ' .tn-atom:before', 't1') + ', ' + 
+getCssPatch(step_up_t1, tb_pth + ':hover .tn-atom:before', 't1') + ',' + getCssPatch(ten_year_t1, tb_pth + ' .tn-atom:before', 't1') + ', ' + 
+getCssPatch(ten_year_t1, tb_pth + ':hover .tn-atom:before', 't1') + ',' + getCssPatch(t_array_acc, tb_pth + ' .tn-atom:before', 't1') + ', ' + 
+getCssPatch(t_array_acc, tb_pth + ':hover .tn-atom:before', 't1'),
+    ` content: '';
+            background-repeat: no-repeat;
+            padding: 20px 64px 21px 0px;
+            background-position: -16px -8px;`
+],
+
+        [getCssPatch(block_array, tb_pth + ' .tn-atom:before', 't1') + ', ' +
+            getCssPatch(step_up_t1, tb_pth + ' .tn-atom:before', 't1') + ', ' +
+            getCssPatch(ten_year_t1, tb_pth + ' .tn-atom:before', 't1') + ', ' +
+            getCssPatch(t_array_acc, tb_pth + ' .tn-atom:before', 't1'),
+            ` background-image: url(https://static.tildacdn.com/tild3034-6331-4334-b730-303266373262/static.svg);`
+        ],
+
+    [getCssPatch(block_array, tb_pth + ':hover .tn-atom:before', 't1') + ', ' + getCssPatch(step_up_t1, tb_pth + ':hover .tn-atom:before', 't1') + ', ' + getCssPatch(ten_year_t1, tb_pth + ':hover .tn-atom:before', 't1') + ', ' + getCssPatch(t_array_acc, tb_pth + ':hover .tn-atom:before', 't1'),
+        `background-image: url(https://static.tildacdn.com/tild6165-6364-4235-b331-383664643230/hover.svg);`
+    ],
+
+
+        // icon position
+        [getCssPatch(block_array, ' [href="#tab1"]:before', 't1'),
+            `background-position: -16px -8px !important;`
+        ],
+
+        [getCssPatch(block_array, ' [href="#tab2"]:before', 't1'),
+            `background-position: -86px -8px !important;`
+        ],
+
+        [getCssPatch(block_array, ' [href="#tab3"]:before', 't1'),
+            `background-position: -154px -8px !important;`
+        ],
+
+        [getCssPatch(block_array, ' [href="#tab4"]:before', 't1'),
+            `background-position: -219px -8px !important;`
+        ],
+
+        [getCssPatch(block_array, ' [href="#tab5"]:before', 't1'),
+            `background-position: -286px -8px !important;`
+        ],
+
+        [getCssPatch(block_array, ' [href="#tab6"]:before', 't1'),
+            `background-position: -351px -8px !important;`
+        ],
+
+        [getCssPatch(block_array, ' [href="#tab7"]:before', 't1'),
+            `background-position: -415px -8px !important;`
+        ],
+
+        [getCssPatch(block_array, tb_pth + ':last-child', 't1') + ',' +
+            getCssPatch(step_up_t1, tb_pth + ':last-child', 't1') + ',' +
+            getCssPatch(ten_year_t1, tb_pth + ':last-child', 't1'),
+            `border-bottom: 0px solid #E5E5E5;`
+        ],
+        
+        /*active, hover-active icon*/
+    [getCssPatchButton(block_array, ' .tn-atom:before', 't1') + ', ' +
+        getCssPatchButton(block_array, ':hover .tn-atom:before', 't1') + ', ' + getCssPatchButton(step_up_t1, ' .tn-atom:before', 't1') + ', ' +
+        getCssPatchButton(step_up_t1, ':hover .tn-atom:before', 't1') + ', ' + getCssPatchButton(ten_year_t1, ' .tn-atom:before', 't1') + ', ' +
+        getCssPatchButton(ten_year_t1, ':hover .tn-atom:before', 't1') + ', ' + getCssPatchButton(t_array_acc, ' .tn-atom:before', 't1') + ', ' +
+        getCssPatchButton(t_array_acc, ':hover .tn-atom:before', 't1'),
+        ` background-image: url(https://static.tildacdn.com/tild6631-3736-4062-b232-616165386161/active.svg);`
+    ],
+
+        [getCssPatchButton(block_array, ':hover', 't1') + ', ' +
+            getCssPatchButton(step_up_t1, ':hover', 't1') + ', ' +
+            getCssPatchButton(ten_year_t1, ':hover', 't1') + ', ' +
+            getCssPatchButton(t_array_acc, ':hover', 't1'),
+            ` border-left: 7px solid #69D3DF;`
+        ],
+        /*active-hover*/
+        [getCssPatchButton(block_array, ':hover .tn-atom', 't1') + ', ' +
+            getCssPatchButton(step_up_t1, ':hover .tn-atom', 't1') + ', ' +
+            getCssPatchButton(ten_year_t1, ':hover .tn-atom', 't1') + ', ' +
+            getCssPatchButton(t_array_acc, ':hover .tn-atom', 't1'),
+            `     background-color: #05b5ca !important;
+                padding-left: 12px;
+                border-top-right-radius: 4px;
+                border-bottom-right-radius: 4px;
+                color: #000 !important; 
+                `
+        ],
+
+        [`.tabs_1_button_active .tn-atom, 
+            .stepup_t1_button_active .tn-atom, 
+            .ten_t1_button_active .tn-atom,
+            .tabs_acc_button_active .tn-atom`,
+            `
+                    text-align: left !important;
+                    border-left: 7px solid #f4f4f4;
+                    background-color: #08B5CA !important;
+                    color: #fff !important;
+                    width: 354px !important;
+                    border-bottom: 0px solid rgba(255,255,255,0.0);
+                    width: 354px !important;
+                    margin-left: -12px;
+                    border-left: 7px solid #69D3DF;
+                    border-radius: 0px;
+                    border-top-right-radius: 4px;
+                    border-bottom-right-radius: 4px;
+                    padding-left: 12px;`
+        ],
+
+        [`.tabs_1_button_active, 
+            .stepup_t1_button_active,
+            .ten_t1_button_active,
+            .tabs_acc_button_active`,
+            `border-bottom: 0px solid #E5E5E5 !important;
+                    width: 354px !important;
+                    margin-left: -12px;
+                    border-left: 7px solid #69D3DF !important;
+                    border-radius: 4px;`
+        ],
+
+        [`.tabs_1_button_active .tn-atom:hover, 
+            .stepup_t1_button_active  .tn-atom:hover, 
+            .ten_t1_button_active  .tn-atom:hover,
+            .tabs_acc_button_active  .tn-atom:hover`,
+            ` color: #000 !important;`
+        ],
+
+    ];
+    let style_tabs_2 = [
+        ['#rec157044371 [data-elem-type="button"] .tn-atom', `background-repeat: no-repeat;
+            background-position: 134px 4px  !important;
+            text-align: left;
+            padding-left: 30px;
+            cursor: pointer;`],
+
+        ['#rec157044371 [data-elem-type="button"] .tn-atom', `background-repeat: no-repeat;
+            background-position: 134px 4px  !important;
+            text-align: left;
+            padding-left: 30px;
+            cursor: pointer;`],
+
+        ['#rec157044371 [data-elem-id="1579828375361"] .tn-atom, #rec157044371 [data-elem-id="1579828495190"] .tn-atom',
+            `background-image: url(https://static.tildacdn.com/tild6436-3134-4831-b335-366364356636/b2__dot-thumb-1.png);`
+        ],
+
+
+        ['#rec157044371 [data-elem-id="1579828623343"] .tn-atom', `   background-image: url( https://static.tildacdn.com/tild3837-3037-4236-a461-613866306164/b2__dot-thumb-3.png);
+            background-position: 120px 4px  !important;`],
+
+        ['#rec157044371 [data-elem-id="1579828659043"] .tn-atom', `     background-image: url(https://static.tildacdn.com/tild3033-6331-4537-b438-663263643532/b2__dot-thumb-4.png);
+            background-position: 134px -3px  !important;`],
+
+        ['#rec157044371 [data-elem-id="1579828667056"] .tn-atom', `         background-image: url(https://static.tildacdn.com/tild3030-3362-4036-b862-343862616531/b2__dot-thumb-5.png);
+            background-position: 114px 4px  !important;`],
+
+        ['.tabs_2_button_active ',
+            `background-color: #fff !important;
+                color: #0BAEBD !important;`
+        ],
+
+
+
+    ];
+    //let style_tabs_2 = [['',``],];
+    let style_tech_t2 = [
+        ['#rec157931544 [data-elem-type="button"] .tn-atom',
+            `text-align: left;
+            padding-left: 20px;
+            background-repeat: no-repeat;
+            padding-right: 68px;`
+        ],
+
+        ['#rec157931544 [data-elem-type="button"] .tn-atom:hover', `background-color: #60D2DC;
+            color: #fff;`],
+
+        ['#rec157931544 [data-elem-id="1580191113400"] .tn-atom', `    background-image: url(https://static.tildacdn.com/tild3261-3866-4232-b937-323632373063/b5__dot-thumb-1.png);
+            background-position: 156px 6px !important;`],
+
+        ['#rec157931544 [data-elem-id="1579828495190"] .tn-atom', `    background-image: url(https://static.tildacdn.com/tild3364-6335-4937-b765-623265656638/b5__dot-thumb-2.png);
+            background-position: 187px 6px !important;`],
+
+        ['#rec157931544 [data-elem-id="1579828623343"] .tn-atom', `    background-image: url(https://static.tildacdn.com/tild3931-3266-4134-b162-363737313730/b5__dot-thumb-3.png);
+            background-position: 109px -9px !important;`],
+
+        ['#rec157931544 [data-elem-id="1579828659043"] .tn-atom', `    background-image: url(https://static.tildacdn.com/tild3930-3631-4131-a433-396166303932/b5__dot-thumb-4.png);
+            background-position: 163px 7px !important;`],
+
+        ['.tech_t2_button_active',
+            `background-color: #60D2DC !important;
+            color: #fff !important;`
+        ],
+    ];
+
+
+
+    // generated style
+    var style = document.createElement('style'); style.innerHTML =
+    generateStyle(style_tabs_1) + '\n' +
+    generateStyle(style_tabs_2) + '\n' +
+    generateStyle(style_tech_t2) + '\n' +
+    generateStyle(style_ten_year_t1) + '\n' +
+    generateStyle(style_step_up_t1);
+
+    document.head.appendChild(style);
+
+
+    });
+</script>
