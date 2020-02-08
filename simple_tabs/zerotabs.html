@@ -10,9 +10,9 @@
 
 <script>
 // определяем блок в котором будут кнопки табов
-let blockButtonForTabs = '#rec115194752 .tn-elem[data-elem-type="button"]';
+let blockButtonsForTabs = '#rec115194752 .tn-elem[data-elem-type="button"]';
 
-//первая активная кнопка
+// первая активная кнопка
 let firstTab = '.tn-elem[data-elem-id="1562702369030"] .tn-atom';
 
 //Все блоки которые учавствуют в табах (НЕ блок с вкладками)
@@ -22,8 +22,6 @@ let allBlockID = `
                     #rec117819568,
                     #rec117820068,
                     #rec117820564`;
-
-
 
 $(document).ready(function () {
    //делаем первую вкладку активной поумолчанию
@@ -35,7 +33,7 @@ $(document).ready(function () {
 
 });
 
-$(document).on('click', blockButtonForTabs, function(tabButton) {
+$(document).on('click', blockButtonsForTabs, function(tabButton) {
 
   let target = tabButton.target; 
 
