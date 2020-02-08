@@ -9,6 +9,11 @@
 </style>
 
 <script>
+
+ function getString(array) {
+        return array.join(', ');
+    }
+
 // определяем блок в котором будут кнопки табов
 let blockButtonsForTabs = '#rec115194752 .tn-elem[data-elem-type="button"]';
 
@@ -16,18 +21,19 @@ let blockButtonsForTabs = '#rec115194752 .tn-elem[data-elem-type="button"]';
 let firstTab = '.tn-elem[data-elem-id="1562702369030"] .tn-atom';
 
 //Все блоки которые учавствуют в табах (НЕ блок с вкладками)
-let allBlockID = `
-                    #rec117822468,
-                    #rec117817695,
-                    #rec117819568,
-                    #rec117820068,
-                    #rec117820564`;
+
+let blocks_id = [
+    '#rec117822468', 
+    '#rec117817695', 
+    '#rec117819568', 
+    '#rec117820068', 
+    '#rec117820564',]              
 
 $(document).ready(function () {
    //делаем первую вкладку активной поумолчанию
         $( firstTab ).addClass('active-tab');
         //скрываем все  блоки
-        $( allBlockID ).hide();
+        $( getString(blocks_id) ).hide();
         //показываем первый активный
         $('#rec117822468').show();
 
@@ -44,29 +50,29 @@ $(document).on('click', blockButtonsForTabs, function(tabButton) {
 
 //проверяем содержимое текста кнопки и в зависимости от совпадения скрываем блоки и показываем нужный
       switch (targetText) {
-        case 'ТекстКнопки1':
-            $(allBlockID).hide();
-            $('#rec117817695').show();
+        case 'ТекстКнопки0':
+            $(getString(blocks_id)).hide();
+            $(blocks_id[0]).show();
             break; 
 
+        case 'ТекстКнопки1':
+            $(getString(blocks_id)).hide();
+            $(blocks_id[1]).show();
+            break;
+
         case 'ТекстКнопки2':
-            $(allBlockID).hide();
-            $('#rec117819568').show();
+            $(getString(blocks_id)).hide();
+            $(blocks_id[2]).show();
             break;
 
         case 'ТекстКнопки3':
-            $(allBlockID).hide();
-            $('#rec117820068').show();
-            break;
-
-        case 'ТекстКнопки4':
-            $(allBlockID).hide();
-            $('#rec117820564').show();
+            $(getString(blocks_id)).hide();
+            $(blocks_id[3]).show();
             break;
 
         default: 
-            $(allBlockID).hide();
-            $('#rec117822468').show();
+            $(getString(blocks_id)).hide();
+            $(blocks_id[0]).show();
             break;
     }
 
