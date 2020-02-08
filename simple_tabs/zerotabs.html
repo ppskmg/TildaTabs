@@ -1,0 +1,76 @@
+<style>
+  .active-tab{
+      background-color: #F3C833 !important;
+      border-color: #F3C833 !important;
+      cursor: default;
+      text-shadow: 0px 1px 2px #fff7df;
+      font-weight: 500 !important;
+  }
+</style>
+
+<script>
+// определяем блок в котором будут кнопки табов
+let blockButtonForTabs = '#rec115194752 .tn-elem[data-elem-type="button"]';
+
+//первая активная кнопка
+let firstTab = '.tn-elem[data-elem-id="1562702369030"] .tn-atom';
+
+//Все блоки которые учавствуют в табах (НЕ блок с вкладками)
+let allBlockID = `
+                    #rec117822468,
+                    #rec117817695,
+                    #rec117819568,
+                    #rec117820068,
+                    #rec117820564`;
+
+
+
+$(document).ready(function () {
+   //делаем первую вкладку активной поумолчанию
+        $( firstTab ).addClass('active-tab');
+        //скрываем все  блоки
+        $( allBlockID ).hide();
+        //показываем первый активный
+        $('#rec117822468').show();
+
+});
+
+$(document).on('click', blockButtonForTabs, function(tabButton) {
+
+  let target = tabButton.target; 
+
+  if (target.className != 'tn-atom') return;
+      let targetText = $(target).text(); 
+      $('.tn-atom').removeClass('active-tab');
+      $(target).addClass('active-tab');
+
+//проверяем содержимое текста кнопки и в зависимости от совпадения скрываем блоки и показываем нужный
+      switch (targetText) {
+        case 'ТекстКнопки1':
+            $(allBlockID).hide();
+            $('#rec117817695').show();
+            break; 
+
+        case 'ТекстКнопки2':
+            $(allBlockID).hide();
+            $('#rec117819568').show();
+            break;
+
+        case 'ТекстКнопки3':
+            $(allBlockID).hide();
+            $('#rec117820068').show();
+            break;
+
+        case 'ТекстКнопки4':
+            $(allBlockID).hide();
+            $('#rec117820564').show();
+            break;
+
+        default: 
+            $(allBlockID).hide();
+            $('#rec117822468').show();
+            break;
+    }
+
+});
+</script>
