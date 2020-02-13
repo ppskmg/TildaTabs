@@ -8,15 +8,13 @@
                 $('#' + $(this).attr("id") + '').prepend(
                     '<span style="z-index: 2000;position: relative; top: 0;  color: #570570; text-align: center; display:block; border-top: 1px solid #ccc">' +
                     '#' + $(this).attr("id") + '</span>');
-
             });
-
-            return;
         };
+
 
         function getString(array) {
         return array.join(', ');
-    }
+        }
 
         function getBlocksId(array) {
             let id_block = []
@@ -25,14 +23,6 @@
             }
             return id_block;
         }
-        // function getBlocksId(array) {
-        //     let block_id_array = [];
-        //     for (let block = 0; block < array.length; block++) {
-        //         block_id_array.push(
-        //             array[block][0]);
-        //     }
-        //     return block_id_array;
-        // }
 
         function getAllBlock(array) {
             let allblock = getBlocksId(array).join(', ')
@@ -163,110 +153,110 @@
         };
 
 
-    function accordionToggle(array, targethref, type_t, tab_name) {
+        function accordionToggle(array, targethref, type_t, tab_name) {
 
-        for (let i = 0; i < array.length; i++) {
-                if (targethref == array[i][2]) {
-                    $(array[i][0]).toggle( 'display' );
-                    //$('[href="'+targethref+'"]').addClass( 'active_acc_2');
-                   
-                } else {
+            for (let i = 0; i < array.length; i++) {
+                    if (targethref == array[i][2]) {
+                        $(array[i][0]).toggle( 'display' );
+                        //$('[href="'+targethref+'"]').addClass( 'active_acc_2');
+                    
+                    } else {
+
+                    }
+                }
+        };
+
+
+        function createTabs(array, string, type_t) {
+            let allblock = getAllBlock(array);
+            let active_buttons = getActiveButtons(array, type_t);
+            //поправить
+            $(allblock).hide();
+
+            if (type_t == 't1') {
+                $(active_buttons).addClass(string + '_button_active');
+                $(array[0][0]).show();
+            } else if (type_t.split(':')[0] == 't2') {
+                $('[data-elem-id="'+array[0][1]+'"] .tn-atom').addClass(string + '_button_active');
+                $(active_buttons).addClass(string + '_button_base');
+                $(array[0][0]).show();
+            }
+            return;
+        };
+
+
+
+        // generation style
+        function getCssPatch(array, string, type_t) {
+            if (type_t == 't1') {
+                let block_id_t1 = getBlocksId(array)
+                let css_patch_t1 = []
+                for (let i = 0; i < block_id_t1.length; i++) {
+                    css_patch_t1.push(block_id_t1[i] + string)
 
                 }
+                let css_patch_t1_string = css_patch_t1.join(', ')
+                return css_patch_t1_string;
+
+            } else if (type_t == 'acc') {
+
+                let block_id_acc = getBlocksIdAcc(array)
+                let css_patch_acc = []
+                for (let i = 0; i < array.length; i++) {
+                    css_patch_acc.push(block_id_acc[i] + string)
+                }
+                let css_patch_acc_string = css_patch_acc.join(', ')
+                return css_patch_acc_string;
             }
-    };
-
-
-    function createTabs(array, string, type_t) {
-        let allblock = getAllBlock(array);
-        let active_buttons = getActiveButtons(array, type_t);
-        //поправить
-        $(allblock).hide();
-
-        if (type_t == 't1') {
-            $(active_buttons).addClass(string + '_button_active');
-            $(array[0][0]).show();
-        } else if (type_t.split(':')[0] == 't2') {
-            $('[data-elem-id="'+array[0][1]+'"] .tn-atom').addClass(string + '_button_active');
-            $(active_buttons).addClass(string + '_button_base');
-            $(array[0][0]).show();
         }
-        return;
-    };
 
 
+        function getCssPatchButton(array, string, type_t) {
+            if (type_t == 't1') {
+                let block_id_t1 = getBlocksId(array)
+                let button_id_t1 = getButtonsId(array)
+                let css_patch_t1 = []
+                for (let i = 0; i < block_id_t1.length; i++) {
+                    css_patch_t1.push(block_id_t1[i] + ' [data-elem-id="' + button_id_t1[i] + '"] ' +
+                        string)
+                }
+                let css_patch_t1_string = css_patch_t1.join(', ')
+                return css_patch_t1_string;
 
-    // generation style
-    function getCssPatch(array, string, type_t) {
-        if (type_t == 't1') {
-            let block_id_t1 = getBlocksId(array)
-            let css_patch_t1 = []
-            for (let i = 0; i < block_id_t1.length; i++) {
-                css_patch_t1.push(block_id_t1[i] + string)
+            } else if (type_t == 'acc') {
 
+                let block_id_acc = getBlocksIdAcc(array)
+                let button_id_acc = getButtonsIdAcc(array)
+                let css_patch_acc = []
+                for (let i = 0; i < array.length; i++) {
+                    css_patch_acc.push(block_id_acc[i] + ' [data-elem-id="' + button_id_acc[i] + '"] ' +
+                        string)
+                }
+                let css_patch_acc_string = css_patch_acc.join(', ')
+                return css_patch_acc_string;
             }
-            let css_patch_t1_string = css_patch_t1.join(', ')
-            return css_patch_t1_string;
+        }
 
-        } else if (type_t == 'acc') {
 
-            let block_id_acc = getBlocksIdAcc(array)
-            let css_patch_acc = []
+        function generateStyle(array) {
+            let style = [];
             for (let i = 0; i < array.length; i++) {
-                css_patch_acc.push(block_id_acc[i] + string)
+                style.push(array[i][0] + '{' + array[i][1] + '}\r\n')
             }
-            let css_patch_acc_string = css_patch_acc.join(', ')
-            return css_patch_acc_string;
+            return style.join('');
         }
-    }
 
+        function activeButtonT2(array, targethref, name_tab) {
 
-    function getCssPatchButton(array, string, type_t) {
-        if (type_t == 't1') {
-            let block_id_t1 = getBlocksId(array)
-            let button_id_t1 = getButtonsId(array)
-            let css_patch_t1 = []
-            for (let i = 0; i < block_id_t1.length; i++) {
-                css_patch_t1.push(block_id_t1[i] + ' [data-elem-id="' + button_id_t1[i] + '"] ' +
-                    string)
-            }
-            let css_patch_t1_string = css_patch_t1.join(', ')
-            return css_patch_t1_string;
-
-        } else if (type_t == 'acc') {
-
-            let block_id_acc = getBlocksIdAcc(array)
-            let button_id_acc = getButtonsIdAcc(array)
-            let css_patch_acc = []
             for (let i = 0; i < array.length; i++) {
-                css_patch_acc.push(block_id_acc[i] + ' [data-elem-id="' + button_id_acc[i] + '"] ' +
-                    string)
+                $('[href="' + array[i][2] + '"]').removeClass(name_tab + '_button_active')
+                if (targethref == array[i][2]) {
+                    $('[href="' + targethref + '"]').addClass(name_tab + '_button_active');
+                };
+
+
             }
-            let css_patch_acc_string = css_patch_acc.join(', ')
-            return css_patch_acc_string;
         }
-    }
-
-
-    function generateStyle(array) {
-        let style = [];
-        for (let i = 0; i < array.length; i++) {
-            style.push(array[i][0] + '{' + array[i][1] + '}\r\n')
-        }
-        return style.join('');
-    }
-
-    function activeButtonT2(array, targethref, name_tab) {
-
-        for (let i = 0; i < array.length; i++) {
-            $('[href="' + array[i][2] + '"]').removeClass(name_tab + '_button_active')
-            if (targethref == array[i][2]) {
-                $('[href="' + targethref + '"]').addClass(name_tab + '_button_active');
-            };
-
-
-        }
-    }
 
 
 
@@ -288,7 +278,6 @@
     createTabs(t_array_acc, 'tabs_acc', 'acc');
     let all_button_acc = getAllBlockAcc(t_array_acc)
     $(document).on('click', all_button_acc, function (tabs_acc) {
-        //checkClickAndShowTabs(t_array_acc, getTargetHref(tabs_acc))
         accordionToggle(t_array_acc, getTargetHref(tabs_acc), 'acc', 'tabs_acc')
     });
 
@@ -306,7 +295,6 @@
     createTabs(t_array_acc_two, 'tabs_acc2', 'acc');
     let all_button_acc2 = getAllBlockAcc(t_array_acc_two)
     $(document).on('click', t_array_acc_two, function (tabs_acc2) {
-        //checkClickAndShowTabs(t_array_acc, getTargetHref(tabs_acc))
         accordionToggle(t_array_acc_two, getTargetHref(tabs_acc2), 'acc', 'tabs_acc2')
     });
 
@@ -337,7 +325,6 @@
     ]
 
     createTabs(block_array, 'tabs_1', 't1')
-
     $(document).on('click', getAllBlock(block_array), function (tabs_one) {
         checkClickAndShowTabs(block_array, getTargetHref(tabs_one))
 
@@ -355,11 +342,12 @@
     ]
 
     createTabs(step_up_t1, 'stepup_t1', 't1')
-
     $(document).on('click', getAllBlock(step_up_t1), function (stepup_t1) {
         checkClickAndShowTabs(step_up_t1, getTargetHref(stepup_t1))
 
     });
+
+
 
     let ten_year_t1 = [
         ['#rec159452580', '1580118251333', '#ten_year_1'],
@@ -370,11 +358,11 @@
 
     ]
     createTabs(ten_year_t1, 'ten_t1', 't1')
-
     $(document).on('click', getAllBlock(ten_year_t1), function (ten_t1) {
         checkClickAndShowTabs(ten_year_t1, getTargetHref(ten_t1))
 
     });
+
 
 
     let block_array_t2 = [
@@ -386,13 +374,10 @@
 
     ]
     createTabs(block_array_t2, 'tabs_2', 't2:#rec157044371')
-    
     $(document).on('click', '#rec157044371', function (tabs_t2) {
         checkClickAndShowTabs(block_array_t2, getTargetHref(tabs_t2))
         activeButtonT2(block_array_t2, getTargetHref(tabs_t2), 'tabs_2')
-        
-       
-        //    if getTargetHref(tabsname)
+
     });
 
     let technology_t2 = [
@@ -403,21 +388,11 @@
 
     ]
     createTabs(technology_t2, 'tech_t2', 't2:#rec157931544')
-    
-    //let active_first_tab = '#rec157931544 [href="' + technology_t2[i][2] + '"] .tn-atom'
     $(document).on('click', '#rec157931544', function (tech_t2) {
         checkClickAndShowTabs(technology_t2, getTargetHref(tech_t2))
         activeButtonT2(technology_t2, getTargetHref(tech_t2), 'tech_t2')
-         //$(active_first_tab).removeClass('tech_t2' + '_button_active');
 
     });
-
-
-
-
-
-
-
 
 
     // 
@@ -431,54 +406,66 @@
     ]
 
     let style_ten_year_t1 = [
-        [getCssPatch(ten_year_t1, ' [href="#ten_year_1"]:before', 't1'),
+        [getCssPatch(ten_year_t1, ' [href="#ten_year_1"]:before', 't1') + ',' +
+        getCssPatch(t_array_acc_three, ' [href="#tab_acc_3__1"]:before', 'acc'),
             `background-position: -1020px -8px !important;`
         ],
 
-        [getCssPatch(ten_year_t1, ' [href="#ten_year_2"]:before', 't1'),
+        [getCssPatch(ten_year_t1, ' [href="#ten_year_2"]:before', 't1') + ',' +
+        getCssPatch(t_array_acc_three, ' [href="#tab_acc_3__2"]:before', 'acc'),
             `background-position: -1086px -8px !important;`
         ],
 
-        [getCssPatch(ten_year_t1, ' [href="#ten_year_3"]:before', 't1'),
+        [getCssPatch(ten_year_t1, ' [href="#ten_year_3"]:before', 't1') + ',' +
+        getCssPatch(t_array_acc_three, ' [href="#tab_acc_3__3"]:before', 'acc'),
             `background-position: -1154px -8px !important;`
         ],
 
-        [getCssPatch(ten_year_t1, ' [href="#ten_year_4"]:before', 't1'),
+        [getCssPatch(ten_year_t1, ' [href="#ten_year_4"]:before', 't1') + ',' +
+        getCssPatch(t_array_acc_three, ' [href="#tab_acc_3__4"]:before', 'acc'),
             `background-position: -1219px -8px !important;`
         ],
 
-        [getCssPatch(ten_year_t1, ' [href="#ten_year_5"]:before', 't1'),
+        [getCssPatch(ten_year_t1, ' [href="#ten_year_5"]:before', 't1') + ',' +
+        getCssPatch(t_array_acc_three, ' [href="#tab_acc_3__5"]:before', 'acc'),
             `background-position: -1286px -8px !important;`
         ],
 
     ]
 
     let style_step_up_t1 = [
-        [getCssPatch(step_up_t1, ' [href="#step_up_1"]:before', 't1'),
+        [getCssPatch(step_up_t1, ' [href="#step_up_1"]:before', 't1') + ',' +
+        getCssPatch(t_array_acc_two, ' [href="#tab_acc_2__1"]:before', 'acc'),
             `background-position: -521px -8px !important;`
         ],
 
-        [getCssPatch(step_up_t1, ' [href="#step_up_2"]:before', 't1'),
+        [getCssPatch(step_up_t1, ' [href="#step_up_2"]:before', 't1') + ',' +
+        getCssPatch(t_array_acc_two, ' [href="#tab_acc_2__2"]:before', 'acc'),
             `background-position: -595px -8px !important;`
         ],
 
-        [getCssPatch(step_up_t1, ' [href="#step_up_3"]:before', 't1'),
+        [getCssPatch(step_up_t1, ' [href="#step_up_3"]:before', 't1') + ',' +
+        getCssPatch(t_array_acc_two, ' [href="#tab_acc_2__3"]:before', 'acc'),
             `background-position: -662px -8px !important;`
         ],
 
-        [getCssPatch(step_up_t1, ' [href="#step_up_4"]:before', 't1'),
+        [getCssPatch(step_up_t1, ' [href="#step_up_4"]:before', 't1') + ',' +
+        getCssPatch(t_array_acc_two, ' [href="#tab_acc_2__4"]:before', 'acc'),
             `background-position: -728px -8px !important;`
         ],
 
-        [getCssPatch(step_up_t1, ' [href="#step_up_5"]:before', 't1'),
+        [getCssPatch(step_up_t1, ' [href="#step_up_5"]:before', 't1') + ',' +
+        getCssPatch(t_array_acc_two, ' [href="#tab_acc_2__5"]:before', 'acc'),
             `background-position: -796px -8px !important;`
         ],
 
-        [getCssPatch(step_up_t1, ' [href="#step_up_6"]:before', 't1'),
+        [getCssPatch(step_up_t1, ' [href="#step_up_6"]:before', 't1') + ',' +
+        getCssPatch(t_array_acc_two, ' [href="#tab_acc_2__6"]:before', 'acc'),
             `background-position: -857px -8px !important;`
         ],
 
-        [getCssPatch(step_up_t1, ' [href="#step_up_7"]:before', 't1'),
+        [getCssPatch(step_up_t1, ' [href="#step_up_7"]:before', 't1') + ',' +
+        getCssPatch(t_array_acc_two, ' [href="#tab_acc_2__7"]:before', 'acc'),
             `background-position: -918px -8px !important;`
         ],
 
@@ -497,14 +484,33 @@
                     text-align: left !important;
                     border-left: 7px solid #f4f4f4;`
         ],
-
+//acc static
+        [getCssPatch(t_array_acc, tb_pth, 'acc') + ', ' +
+        getCssPatch(t_array_acc_two, tb_pth, 'acc') + ', ' +
+        getCssPatch(t_array_acc_three, tb_pth, 'acc'), 
+        ` width: 330px !important;
+            margin-left: -15px;
+            border-bottom: none !important;
+            border-left: 7px solid #05b5ca;
+            border-radius: 4px;
+            height: 60px;`
+        ],
+        [getCssPatch(t_array_acc, tb_pth +':after', 'acc') + ', ' +
+        getCssPatch(t_array_acc_two, tb_pth +':after', 'acc') + ', ' +
+        getCssPatch(t_array_acc_three, tb_pth +':after', 'acc'), 
+        ` content: '';
+        background-image: url(https://static.tildacdn.com/tild6363-6433-4033-b130-633163636561/icons8-expand2.svg);
+           background-repeat: no-repeat;
+        padding: 15px;
+        background-position: -2px 24px;
+        background-size: 30px;
+        margin-left: -41px;`
+        ],
+        
 
         [getCssPatch(block_array, tb_pth + ':hover', 't1') + ',' +
             getCssPatch(step_up_t1, tb_pth + ':hover', 't1') + ',' +
-            getCssPatch(ten_year_t1, tb_pth + ':hover', 't1') + ',' +
-            getCssPatch(t_array_acc, tb_pth + ':hover', 'acc') + ', ' + 
-            getCssPatch(t_array_acc_two, tb_pth + ':hover', 'acc') + ', ' + 
-            getCssPatch(t_array_acc_three, tb_pth + ':hover', 'acc'),
+            getCssPatch(ten_year_t1, tb_pth + ':hover', 't1'),
             `border-bottom: 0px solid rgba(255,255,255,0.0);
                     width: 354px !important;
                     margin-left: -12px;
@@ -514,10 +520,7 @@
 
         [getCssPatch(block_array, tb_pth + ':hover .tn-atom', 't1') + ',' +
             getCssPatch(step_up_t1, tb_pth + ':hover .tn-atom', 't1') + ',' +
-            getCssPatch(ten_year_t1, tb_pth + ':hover .tn-atom', 't1') + ',' +
-            getCssPatch(t_array_acc, tb_pth + ':hover .tn-atom', 'acc') + ', ' + 
-            getCssPatch(t_array_acc_two, tb_pth + ':hover .tn-atom', 'acc') + ', ' + 
-            getCssPatch(t_array_acc_three, tb_pth + ':hover .tn-atom', 'acc'),
+            getCssPatch(ten_year_t1, tb_pth + ':hover .tn-atom', 't1'),
             ` padding-left: 12px;
                     border-top-right-radius: 4px;
                     border-bottom-right-radius: 4px;`
@@ -538,9 +541,9 @@ getCssPatch(step_up_t1, tb_pth + ' .tn-atom:before', 't1') + ', ' +
 getCssPatch(step_up_t1, tb_pth + ':hover .tn-atom:before', 't1') + ',' + 
 getCssPatch(ten_year_t1, tb_pth + ' .tn-atom:before', 't1') + ', ' + 
 getCssPatch(ten_year_t1, tb_pth + ':hover .tn-atom:before', 't1') + ',' + 
-getCssPatch(t_array_acc, tb_pth + ' .tn-atom:before', 't1') + ', ' + 
-getCssPatch(t_array_acc_two, tb_pth + ' .tn-atom:before', 't1') + ', ' + 
-getCssPatch(t_array_acc_three, tb_pth + ' .tn-atom:before', 't1') + ', ' + 
+getCssPatch(t_array_acc, tb_pth + ' .tn-atom:before', 'acc') + ', ' + 
+getCssPatch(t_array_acc_two, tb_pth + ' .tn-atom:before', 'acc') + ', ' + 
+getCssPatch(t_array_acc_three, tb_pth + ' .tn-atom:before', 'acc') + ', ' + 
 getCssPatch(t_array_acc, tb_pth + ':hover .tn-atom:before', 'acc') + ', ' + 
 getCssPatch(t_array_acc_two, tb_pth + ':hover .tn-atom:before', 'acc') + ', ' + 
 getCssPatch(t_array_acc_three, tb_pth + ':hover .tn-atom:before', 'acc'),
@@ -559,37 +562,48 @@ getCssPatch(t_array_acc_three, tb_pth + ':hover .tn-atom:before', 'acc'),
             ` background-image: url(https://static.tildacdn.com/tild3034-6331-4334-b730-303266373262/static.svg);`
         ],
 
-    [getCssPatch(block_array, tb_pth + ':hover .tn-atom:before', 't1') + ', ' + getCssPatch(step_up_t1, tb_pth + ':hover .tn-atom:before', 't1') + ', ' + getCssPatch(ten_year_t1, tb_pth + ':hover .tn-atom:before', 't1') + ', ' + getCssPatch(t_array_acc, tb_pth + ':hover .tn-atom:before', 't1'),
+    [getCssPatch(block_array, tb_pth + ':hover .tn-atom:before', 't1') + ', ' + 
+    getCssPatch(step_up_t1, tb_pth + ':hover .tn-atom:before', 't1') + ', ' + 
+    getCssPatch(ten_year_t1, tb_pth + ':hover .tn-atom:before', 't1') + ', ' + 
+    getCssPatch(t_array_acc, tb_pth + ':hover .tn-atom:before', 'acc') + ', ' + 
+     getCssPatch(t_array_acc_two, tb_pth + ':hover .tn-atom:before', 'acc') + ', ' + 
+      getCssPatch(t_array_acc_three, tb_pth + ':hover .tn-atom:before', 'acc'),
         `background-image: url(https://static.tildacdn.com/tild6165-6364-4235-b331-383664643230/hover.svg);`
     ],
 
 
         // icon position
-        [getCssPatch(block_array, ' [href="#tab1"]:before', 't1'),
+        [getCssPatch(block_array, ' [href="#tab1"]:before', 't1') + ', ' +
+         getCssPatch(t_array_acc, ' [href="#tab_acc_1"]:before', 'acc'),
             `background-position: -16px -8px !important;`
         ],
 
-        [getCssPatch(block_array, ' [href="#tab2"]:before', 't1'),
+        [getCssPatch(block_array, ' [href="#tab2"]:before', 't1') + ', ' +
+         getCssPatch(t_array_acc, ' [href="#tab_acc_2"]:before', 'acc'),
             `background-position: -86px -8px !important;`
         ],
 
-        [getCssPatch(block_array, ' [href="#tab3"]:before', 't1'),
+        [getCssPatch(block_array, ' [href="#tab3"]:before', 't1') + ', ' +
+         getCssPatch(t_array_acc, ' [href="#tab_acc_3"]:before', 'acc'),
             `background-position: -154px -8px !important;`
         ],
-
-        [getCssPatch(block_array, ' [href="#tab4"]:before', 't1'),
+        [getCssPatch(block_array, ' [href="#tab4"]:before', 't1') + ', ' +
+         getCssPatch(t_array_acc, ' [href="#tab_acc_4"]:before', 'acc'),
             `background-position: -219px -8px !important;`
         ],
 
-        [getCssPatch(block_array, ' [href="#tab5"]:before', 't1'),
+        [getCssPatch(block_array, ' [href="#tab5"]:before', 't1') + ', ' +
+          getCssPatch(t_array_acc, ' [href="#tab_acc_5"]:before', 'acc'),
             `background-position: -286px -8px !important;`
         ],
 
-        [getCssPatch(block_array, ' [href="#tab6"]:before', 't1'),
+        [getCssPatch(block_array, ' [href="#tab6"]:before', 't1') + ', ' +
+         getCssPatch(t_array_acc, ' [href="#tab_acc_6"]:before', 'acc'),
             `background-position: -351px -8px !important;`
         ],
 
-        [getCssPatch(block_array, ' [href="#tab7"]:before', 't1'),
+        [getCssPatch(block_array, ' [href="#tab7"]:before', 't1') + ', ' +
+         getCssPatch(t_array_acc, ' [href="#tab_acc_7"]:before', 'acc'),
             `background-position: -415px -8px !important;`
         ],
 
@@ -605,15 +619,10 @@ getCssPatch(t_array_acc_three, tb_pth + ':hover .tn-atom:before', 'acc'),
         getCssPatchButton(step_up_t1, ' .tn-atom:before', 't1') + ', ' +
         getCssPatchButton(step_up_t1, ':hover .tn-atom:before', 't1') + ', ' + 
         getCssPatchButton(ten_year_t1, ' .tn-atom:before', 't1') + ', ' +
-        getCssPatchButton(ten_year_t1, ':hover .tn-atom:before', 't1') + ', ' + 
-        getCssPatchButton(t_array_acc, ' .tn-atom:before', 't1') + ', ' +
-        getCssPatchButton(t_array_acc_two, ' .tn-atom:before', 't1') + ', ' +
-        getCssPatchButton(t_array_acc_three, ' .tn-atom:before', 't1') + ', ' +
-        getCssPatchButton(t_array_acc, ':hover .tn-atom:before', 'acc')+ ', ' +
-         getCssPatchButton(t_array_acc_two, ':hover .tn-atom:before', 'acc')+ ', ' +
-          getCssPatchButton(t_array_acc_three, ':hover .tn-atom:before', 'acc'),
+        getCssPatchButton(ten_year_t1, ':hover .tn-atom:before', 't1'),
         ` background-image: url(https://static.tildacdn.com/tild6631-3736-4062-b232-616165386161/active.svg);`
-    ],
+    ], 
+    
 
         [getCssPatchButton(block_array, ':hover', 't1') + ', ' +
             getCssPatchButton(step_up_t1, ':hover', 't1') + ', ' +
@@ -626,10 +635,7 @@ getCssPatch(t_array_acc_three, tb_pth + ':hover .tn-atom:before', 'acc'),
         /*active-hover*/
         [getCssPatchButton(block_array, ':hover .tn-atom', 't1') + ', ' +
             getCssPatchButton(step_up_t1, ':hover .tn-atom', 't1') + ', ' +
-            getCssPatchButton(ten_year_t1, ':hover .tn-atom', 't1') + ', ' +
-            getCssPatchButton(t_array_acc, ':hover .tn-atom', 'acc')+ ', ' +
-            getCssPatchButton(t_array_acc_two, ':hover .tn-atom', 'acc')+ ', ' +
-            getCssPatchButton(t_array_acc_three, ':hover .tn-atom', 'acc'),
+            getCssPatchButton(ten_year_t1, ':hover .tn-atom', 't1'),
             `     background-color: #05b5ca !important;
                 padding-left: 12px;
                 border-top-right-radius: 4px;
@@ -642,8 +648,7 @@ getCssPatch(t_array_acc_three, tb_pth + ':hover .tn-atom:before', 'acc'),
             .stepup_t1_button_active .tn-atom, 
             .ten_t1_button_active .tn-atom,
             .tabs_acc_button_active .tn-atom`,
-            `
-                    text-align: left !important;
+            `  text-align: left !important;
                     border-left: 7px solid #f4f4f4;
                     background-color: #08B5CA !important;
                     color: #fff !important;
