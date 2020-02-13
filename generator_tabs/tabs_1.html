@@ -1,6 +1,8 @@
 <script>
     $(document).ready(function () {
 
+        $('[data-elem-id="1580683016619"]').attr("data-elem-type","button2");
+
         function debugBlockTrue(string) {
             $(string).each(function () {
                 $('#' + $(this).attr("id") + '').prepend(
@@ -166,11 +168,10 @@
         for (let i = 0; i < array.length; i++) {
                 if (targethref == array[i][2]) {
                     $(array[i][0]).toggle( 'display' );
-                    //$(href).removeClass(add_class);
-                } else {
+                    //$('[href="'+targethref+'"]').addClass( 'active_acc_2');
                    
-                    //$(array[i][0]).hide();
-                    
+                } else {
+
                 }
             }
     };
@@ -186,6 +187,7 @@
             $(active_buttons).addClass(string + '_button_active');
             $(array[0][0]).show();
         } else if (type_t.split(':')[0] == 't2') {
+            $('[data-elem-id="'+array[0][1]+'"] .tn-atom').addClass(string + '_button_active');
             $(active_buttons).addClass(string + '_button_base');
             $(array[0][0]).show();
         }
@@ -257,14 +259,12 @@
     function activeButtonT2(array, targethref, name_tab) {
 
         for (let i = 0; i < array.length; i++) {
-
             $('[href="' + array[i][2] + '"]').removeClass(name_tab + '_button_active')
-
             if (targethref == array[i][2]) {
                 $('[href="' + targethref + '"]').addClass(name_tab + '_button_active');
-            }
+            };
 
-            ;
+
         }
     }
 
@@ -386,11 +386,13 @@
 
     ]
     createTabs(block_array_t2, 'tabs_2', 't2:#rec157044371')
-
+    
     $(document).on('click', '#rec157044371', function (tabs_t2) {
         checkClickAndShowTabs(block_array_t2, getTargetHref(tabs_t2))
         activeButtonT2(block_array_t2, getTargetHref(tabs_t2), 'tabs_2')
-
+        
+       
+        //    if getTargetHref(tabsname)
     });
 
     let technology_t2 = [
@@ -400,11 +402,13 @@
         ['#rec159425472', '1579828659043', '#tech_4'],
 
     ]
-    createTabs(technology_t2, 'tabs_2', 't2:#rec157931544')
-
+    createTabs(technology_t2, 'tech_t2', 't2:#rec157931544')
+    
+    //let active_first_tab = '#rec157931544 [href="' + technology_t2[i][2] + '"] .tn-atom'
     $(document).on('click', '#rec157931544', function (tech_t2) {
         checkClickAndShowTabs(technology_t2, getTargetHref(tech_t2))
         activeButtonT2(technology_t2, getTargetHref(tech_t2), 'tech_t2')
+         //$(active_first_tab).removeClass('tech_t2' + '_button_active');
 
     });
 
