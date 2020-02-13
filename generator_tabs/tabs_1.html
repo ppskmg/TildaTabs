@@ -67,14 +67,14 @@
 
 
 
-        function getButtonsIdAcc(array) {
-            let block_id_array = [];
-            for (let block = 0; block < array.length; block++) {
-                block_id_array.push(
-                    array[block][1].split(':')[1]);
+            function getButtonsIdAcc(array) {
+                let block_id_array = [];
+                for (let block = 0; block < array.length; block++) {
+                    block_id_array.push(
+                        array[block][1].split(':')[1]);
+                }
+                return block_id_array;
             }
-            return block_id_array;
-        }
 
         function getButtonsActive(array, type_t) {
             //#rec158925496 .tn-elem[data-elem-id="1580118251333"] .tn-atom'
@@ -490,16 +490,21 @@
         [getCssPatch(block_array, tb_pth, 't1') + ',' +
             getCssPatch(step_up_t1, tb_pth, 't1') + ',' +
             getCssPatch(ten_year_t1, tb_pth, 't1') + ',' +
-            getCssPatch(t_array_acc, tb_pth, 't1'),
+            getCssPatch(t_array_acc, tb_pth, 'acc') + ', ' + 
+            getCssPatch(t_array_acc_two, tb_pth, 'acc') + ', ' + 
+            getCssPatch(t_array_acc_three, tb_pth, 'acc'),
             `border-bottom: 2px solid #E5E5E5;
                     text-align: left !important;
                     border-left: 7px solid #f4f4f4;`
         ],
 
+
         [getCssPatch(block_array, tb_pth + ':hover', 't1') + ',' +
             getCssPatch(step_up_t1, tb_pth + ':hover', 't1') + ',' +
             getCssPatch(ten_year_t1, tb_pth + ':hover', 't1') + ',' +
-            getCssPatch(t_array_acc, tb_pth + ':hover', 't1'),
+            getCssPatch(t_array_acc, tb_pth + ':hover', 'acc') + ', ' + 
+            getCssPatch(t_array_acc_two, tb_pth + ':hover', 'acc') + ', ' + 
+            getCssPatch(t_array_acc_three, tb_pth + ':hover', 'acc'),
             `border-bottom: 0px solid rgba(255,255,255,0.0);
                     width: 354px !important;
                     margin-left: -12px;
@@ -510,7 +515,9 @@
         [getCssPatch(block_array, tb_pth + ':hover .tn-atom', 't1') + ',' +
             getCssPatch(step_up_t1, tb_pth + ':hover .tn-atom', 't1') + ',' +
             getCssPatch(ten_year_t1, tb_pth + ':hover .tn-atom', 't1') + ',' +
-            getCssPatch(t_array_acc, tb_pth + ':hover .tn-atom', 't1'),
+            getCssPatch(t_array_acc, tb_pth + ':hover .tn-atom', 'acc') + ', ' + 
+            getCssPatch(t_array_acc_two, tb_pth + ':hover .tn-atom', 'acc') + ', ' + 
+            getCssPatch(t_array_acc_three, tb_pth + ':hover .tn-atom', 'acc'),
             ` padding-left: 12px;
                     border-top-right-radius: 4px;
                     border-bottom-right-radius: 4px;`
@@ -519,14 +526,24 @@
         [getCssPatch(block_array, tb_pth + ' .tn-atom:hover', 't1') + ',' +
             getCssPatch(step_up_t1, tb_pth + ' .tn-atom:hover', 't1') + ',' +
             getCssPatch(ten_year_t1, tb_pth + ' .tn-atom:hover', 't1') + ',' +
-            getCssPatch(t_array_acc, tb_pth + ' .tn-atom:hover', 't1'),
+            getCssPatch(t_array_acc, tb_pth + ' .tn-atom:hover', 'acc') + ', ' + 
+            getCssPatch(t_array_acc_two, tb_pth + ' .tn-atom:hover', 'acc') + ', ' + 
+            getCssPatch(t_array_acc_three, tb_pth + ' .tn-atom:hover', 'acc'),
             ` background-color: #fff !important;`
         ],
 
-[getCssPatch(block_array, tb_pth + ' .tn-atom:before', 't1') + ', ' + getCssPatch(block_array, tb_pth + ':hover .tn-atom:before', 't1') + ',' + getCssPatch(step_up_t1, tb_pth + ' .tn-atom:before', 't1') + ', ' + 
-getCssPatch(step_up_t1, tb_pth + ':hover .tn-atom:before', 't1') + ',' + getCssPatch(ten_year_t1, tb_pth + ' .tn-atom:before', 't1') + ', ' + 
-getCssPatch(ten_year_t1, tb_pth + ':hover .tn-atom:before', 't1') + ',' + getCssPatch(t_array_acc, tb_pth + ' .tn-atom:before', 't1') + ', ' + 
-getCssPatch(t_array_acc, tb_pth + ':hover .tn-atom:before', 't1'),
+[getCssPatch(block_array, tb_pth + ' .tn-atom:before', 't1') + ', ' + 
+getCssPatch(block_array, tb_pth + ':hover .tn-atom:before', 't1') + ',' + 
+getCssPatch(step_up_t1, tb_pth + ' .tn-atom:before', 't1') + ', ' + 
+getCssPatch(step_up_t1, tb_pth + ':hover .tn-atom:before', 't1') + ',' + 
+getCssPatch(ten_year_t1, tb_pth + ' .tn-atom:before', 't1') + ', ' + 
+getCssPatch(ten_year_t1, tb_pth + ':hover .tn-atom:before', 't1') + ',' + 
+getCssPatch(t_array_acc, tb_pth + ' .tn-atom:before', 't1') + ', ' + 
+getCssPatch(t_array_acc_two, tb_pth + ' .tn-atom:before', 't1') + ', ' + 
+getCssPatch(t_array_acc_three, tb_pth + ' .tn-atom:before', 't1') + ', ' + 
+getCssPatch(t_array_acc, tb_pth + ':hover .tn-atom:before', 'acc') + ', ' + 
+getCssPatch(t_array_acc_two, tb_pth + ':hover .tn-atom:before', 'acc') + ', ' + 
+getCssPatch(t_array_acc_three, tb_pth + ':hover .tn-atom:before', 'acc'),
     ` content: '';
             background-repeat: no-repeat;
             padding: 20px 64px 21px 0px;
@@ -536,7 +553,9 @@ getCssPatch(t_array_acc, tb_pth + ':hover .tn-atom:before', 't1'),
         [getCssPatch(block_array, tb_pth + ' .tn-atom:before', 't1') + ', ' +
             getCssPatch(step_up_t1, tb_pth + ' .tn-atom:before', 't1') + ', ' +
             getCssPatch(ten_year_t1, tb_pth + ' .tn-atom:before', 't1') + ', ' +
-            getCssPatch(t_array_acc, tb_pth + ' .tn-atom:before', 't1'),
+            getCssPatch(t_array_acc, tb_pth + ' .tn-atom:before', 'acc') + ', ' +
+            getCssPatch(t_array_acc_two, tb_pth + ' .tn-atom:before', 'acc') + ', ' +
+            getCssPatch(t_array_acc_three, tb_pth + ' .tn-atom:before', 'acc'),
             ` background-image: url(https://static.tildacdn.com/tild3034-6331-4334-b730-303266373262/static.svg);`
         ],
 
@@ -582,24 +601,35 @@ getCssPatch(t_array_acc, tb_pth + ':hover .tn-atom:before', 't1'),
         
         /*active, hover-active icon*/
     [getCssPatchButton(block_array, ' .tn-atom:before', 't1') + ', ' +
-        getCssPatchButton(block_array, ':hover .tn-atom:before', 't1') + ', ' + getCssPatchButton(step_up_t1, ' .tn-atom:before', 't1') + ', ' +
-        getCssPatchButton(step_up_t1, ':hover .tn-atom:before', 't1') + ', ' + getCssPatchButton(ten_year_t1, ' .tn-atom:before', 't1') + ', ' +
-        getCssPatchButton(ten_year_t1, ':hover .tn-atom:before', 't1') + ', ' + getCssPatchButton(t_array_acc, ' .tn-atom:before', 't1') + ', ' +
-        getCssPatchButton(t_array_acc, ':hover .tn-atom:before', 't1'),
+        getCssPatchButton(block_array, ':hover .tn-atom:before', 't1') + ', ' + 
+        getCssPatchButton(step_up_t1, ' .tn-atom:before', 't1') + ', ' +
+        getCssPatchButton(step_up_t1, ':hover .tn-atom:before', 't1') + ', ' + 
+        getCssPatchButton(ten_year_t1, ' .tn-atom:before', 't1') + ', ' +
+        getCssPatchButton(ten_year_t1, ':hover .tn-atom:before', 't1') + ', ' + 
+        getCssPatchButton(t_array_acc, ' .tn-atom:before', 't1') + ', ' +
+        getCssPatchButton(t_array_acc_two, ' .tn-atom:before', 't1') + ', ' +
+        getCssPatchButton(t_array_acc_three, ' .tn-atom:before', 't1') + ', ' +
+        getCssPatchButton(t_array_acc, ':hover .tn-atom:before', 'acc')+ ', ' +
+         getCssPatchButton(t_array_acc_two, ':hover .tn-atom:before', 'acc')+ ', ' +
+          getCssPatchButton(t_array_acc_three, ':hover .tn-atom:before', 'acc'),
         ` background-image: url(https://static.tildacdn.com/tild6631-3736-4062-b232-616165386161/active.svg);`
     ],
 
         [getCssPatchButton(block_array, ':hover', 't1') + ', ' +
             getCssPatchButton(step_up_t1, ':hover', 't1') + ', ' +
             getCssPatchButton(ten_year_t1, ':hover', 't1') + ', ' +
-            getCssPatchButton(t_array_acc, ':hover', 't1'),
+            getCssPatchButton(t_array_acc, ':hover', 'acc')+ ', ' +
+            getCssPatchButton(t_array_acc_two, ':hover', 'acc')+ ', ' +
+            getCssPatchButton(t_array_acc_three, ':hover', 'acc'),
             ` border-left: 7px solid #69D3DF;`
         ],
         /*active-hover*/
         [getCssPatchButton(block_array, ':hover .tn-atom', 't1') + ', ' +
             getCssPatchButton(step_up_t1, ':hover .tn-atom', 't1') + ', ' +
             getCssPatchButton(ten_year_t1, ':hover .tn-atom', 't1') + ', ' +
-            getCssPatchButton(t_array_acc, ':hover .tn-atom', 't1'),
+            getCssPatchButton(t_array_acc, ':hover .tn-atom', 'acc')+ ', ' +
+            getCssPatchButton(t_array_acc_two, ':hover .tn-atom', 'acc')+ ', ' +
+            getCssPatchButton(t_array_acc_three, ':hover .tn-atom', 'acc'),
             `     background-color: #05b5ca !important;
                 padding-left: 12px;
                 border-top-right-radius: 4px;
