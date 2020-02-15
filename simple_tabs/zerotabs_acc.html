@@ -1,0 +1,63 @@
+<script>
+$(document).ready(function() {
+
+    function getString(array) {
+        return array.join(', ');
+        }
+
+
+    function getBlocksId(array) {
+        let id_block = []
+        for (let block = 0; block < array.length; block++) {
+            id_block.push(array[block][0]);
+        }
+        return id_block;
+    }
+
+
+    let tabBlockButton = '#rec162947165';
+
+    let allBlocks = [
+        ['#rec162947678', '#stage_tab1'],
+        ['#rec162947741', '#stage_tab2'],
+        ['#rec162947746', '#stage_tab3'],
+        ['#rec162947748', '#stage_tab4'],
+        ['#rec162947752', '#stage_tab5'],
+        ['#rec162947755', '#stage_tab6']]
+
+    blocksId = getBlocksId(allBlocks)
+
+    $(getString(blocksId)).hide() //скрыть все блоки
+
+
+    $(document).on('click', tabBlockButton, function(showTab) {
+    
+        let target = showTab.target; // где был клик?
+        
+        //если клик был не по вкладке
+        if (target.className != 'tn-atom') return;
+        
+        let tabHref = $(target).attr("href");
+
+        for (let i = 0; i < blocksId.length; i++) {
+            
+            if (tabHref == allBlocks[i][1]) {
+                if ($(allBlocks[i][0]).css( 'display') == 'block') {
+                    $(allBlocks[i][0]).css( 'display', 'none' );
+                } else {
+                    $(allBlocks[i][0]).css( 'display', 'block' );
+                }
+            } else {
+                for (let i = 0; i < allBlocks.length; i++) {
+                    if (tabHref != allBlocks[i][1]) {
+                        $(allBlocks[i][0]).css( 'display', 'none' );
+                    }
+                }
+            }
+        }
+        console.log(tabHref);
+
+    });
+   
+});
+</script>
