@@ -1,28 +1,35 @@
 <script>
+// Создание зависимых вкладок из zero блоков в тильде
+// Код для самых маленьких, сори за обилие комментариев
 
 $(document).ready(function() {
+    
+    // функции простых операций используемые дальше по коду
+    
     function getString(array) {
+        // делаем строку из нескольких id
         return array.join(', ');
-
         }
-
+    
     function getBlocksId(array) {
+        // для создания массива из id блоков
         let id_block = []
         for (let block = 0; block < array.length; block++) {
             id_block.push(array[block][0]);
         }
         return id_block;
-
     }
+ 
 
-
-//     Перечисляются блоки в каждом из блоков имеются кнопки для переключения блоков. 
-//     в массиве второй элемент ссылка, отвечающая за открытие этого блока, ссылки в блоках должны быть одинаковые
+//     Перечисляются блоки, в каждом из блоков имеются кнопки для переключения вкладок (принцип аккардеона). 
+//     в массиве: второй элемент является ссылкой у кнопки, отвечающая за открытие этого блока, ссылки в блоках должны быть одинаковые
 //     пример: в блоке 12 кнопок с ссылками от #stage_tab1 до #stage_tab12
-
+//     и в остальных блоках аналогично #stage_tab1 до #stage_tab12
+//     таким образом получится самая простая реализация в тильде, для простого редактирования блоков и изменения количества блоков
+//     для тонкой настройки можно дописать свои условия в цикл for и добавить свои проверки
 
     let allBlocks = [
-
+        // #id            #ссылка          количество блоков можно менять, внимательно! с запятыми, кавычками и скобками
         ['#rec195494389', '#stage_tab1'],
         ['#rec195494536', '#stage_tab2'],
         ['#rec195494575', '#stage_tab3'],
@@ -37,25 +44,23 @@ $(document).ready(function() {
         ['#rec195494918', '#stage_tab12']]
 
 
-    blocksId = getBlocksId(allBlocks)
-    $(getString(blocksId)).hide() //скрыть все блоки
-
-    let firstTab = '#rec195494389'; // id первого блока
-    $(firstTab).show() // показать первый блок при загрузке
+    blocksId = getBlocksId(allBlocks) // получаем массив с id блоков
+    $(getString(blocksId)).hide() //скрываем все блоки
+    $(allBlocks[0][0]).show() // показать первый блок при загрузке
 
     $(document).on('click', getString(blocksId), function(showTab) { // событие срабатывает при клике на любой из перечисленных блоков getString(blocksId)
         let target = showTab.target; // где был клик?
-        //если клик был не по вкладке
-        if (target.className != 'tn-atom') return;
-        let tabHref = $(target).attr("href");
-        for (let i = 0; i < blocksId.length; i++) {
-            if (tabHref == allBlocks[i][1]) {
-                $(allBlocks[i][0]).show();
+        if (target.className != 'tn-atom') return; //если клик был не по вкладке, прерываем
+        
+        let tabHref = $(target).attr("href"); // получаем ссылку кнопки
+        for (let i = 0; i < blocksId.length; i++) { // перебираем массив
+            if (tabHref == allBlocks[i][1]) { // если ссылка есть в массиве
+                $(allBlocks[i][0]).show(); // показываем блок
             } else {
-                $(allBlocks[i][0]).hide();
+                $(allBlocks[i][0]).hide(); // иначе скрываем
             }
         }
-        console.log(tabHref);
+        console.log(tabHref); // выводим в консоль ссылку по которой был клик (для отладки, следует закомментировать)
     });
 
 });
