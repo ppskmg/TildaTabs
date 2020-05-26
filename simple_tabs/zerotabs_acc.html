@@ -1,10 +1,10 @@
 <script>
-$(document).ready(function() {
 
+$(document).ready(function() {
     function getString(array) {
         return array.join(', ');
-        }
 
+        }
 
     function getBlocksId(array) {
         let id_block = []
@@ -12,16 +12,17 @@ $(document).ready(function() {
             id_block.push(array[block][0]);
         }
         return id_block;
+
     }
 
 
-    let tabBlockButton = '#rec195494389';
-    $(tabBlockButton).show() // показываем первый блок
 //     Перечисляются блоки в каждом из блоков имеются кнопки для переключения блоков. 
 //     в массиве второй элемент ссылка, отвечающая за открытие этого блока, ссылки в блоках должны быть одинаковые
 //     пример: в блоке 12 кнопок с ссылками от #stage_tab1 до #stage_tab12
 
+
     let allBlocks = [
+
         ['#rec195494389', '#stage_tab1'],
         ['#rec195494536', '#stage_tab2'],
         ['#rec195494575', '#stage_tab3'],
@@ -35,39 +36,28 @@ $(document).ready(function() {
         ['#rec195494898', '#stage_tab11'],
         ['#rec195494918', '#stage_tab12']]
 
+
     blocksId = getBlocksId(allBlocks)
-
     $(getString(blocksId)).hide() //скрыть все блоки
-    
 
-    $(document).on('click', tabBlockButton, function(showTab) {
-    
+    let firstTab = '#rec195494389'; // id первого блока
+    $(firstTab).show() // показать первый блок при загрузке
+
+    $(document).on('click', getString(blocksId), function(showTab) { // событие срабатывает при клике на любой из перечисленных блоков getString(blocksId)
         let target = showTab.target; // где был клик?
-        
         //если клик был не по вкладке
         if (target.className != 'tn-atom') return;
-        
         let tabHref = $(target).attr("href");
-
         for (let i = 0; i < blocksId.length; i++) {
-            
             if (tabHref == allBlocks[i][1]) {
-                if ($(allBlocks[i][0]).css( 'display') == 'block') {
-                    $(allBlocks[i][0]).css( 'display', 'none' );
-                } else {
-                    $(allBlocks[i][0]).css( 'display', 'block' );
-                }
+                $(allBlocks[i][0]).show();
             } else {
-                for (let i = 0; i < allBlocks.length; i++) {
-                    if (tabHref != allBlocks[i][1]) {
-                        $(allBlocks[i][0]).css( 'display', 'none' );
-                    }
-                }
+                $(allBlocks[i][0]).hide();
             }
         }
         console.log(tabHref);
-
     });
-   
+
 });
+
 </script>
