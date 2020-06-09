@@ -55,10 +55,9 @@ $(document).ready(function() {
         let tabHref = $(target).attr("href"); // получаем ссылку кнопки
         for (let i = 0; i < blocksId.length; i++) { // перебираем массив
             if (tabHref == allBlocks[i][1]) { // если ссылка есть в массиве
-                $(allBlocks[i][0]).show(); // показываем блок
-            } else {
-                $(allBlocks[i][0]).hide(); // иначе скрываем
-            }
+                $(getString(blocksId)).hide() // скрываем все
+                $(allBlocks[i][0]).show(); // показываем нужный
+            } 
         }
         console.log(tabHref); // выводим в консоль ссылку по которой был клик (для отладки, следует закомментировать)
     });
