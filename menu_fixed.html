@@ -1,0 +1,48 @@
+<style>
+    
+    #rec214734826 .t396__artboard {
+        position: fixed;
+        z-index: 100500;
+    }
+    
+    /*burger*/
+    #rec214742881 .t396__artboard {
+        display: block;
+        position: fixed;
+        z-index: 100501;
+    }
+
+</style>
+
+
+
+<script>
+    
+    $(window).load(function() {
+        $('#rec214734826 .t396__artboard').css('display', 'none');
+        // burger
+        $('#rec214742881 .t396__artboard').css('display', 'none');
+        
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 100) {
+                $('#rec214734826 .t396__artboard').css('display', 'block');
+            } else {
+                
+                $('#rec214734826 .t396__artboard').css('display', 'none');
+            }
+        })
+    })
+
+
+
+    $(document).ready(function() {
+        $('.tn-elem__2147348261595673979787 > div').on('click', function() {
+            $('#rec214742881 .t396__artboard').css('display', 'block');
+        })
+        
+        $('#rec214742881 a').on('click', function() {
+            $('#rec214742881 .t396__artboard').css('display', 'none');
+        })
+    })
+
+</script>
