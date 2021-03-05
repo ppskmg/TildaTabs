@@ -1,0 +1,132 @@
+<!-- переключение продуктов в одном Zero блоке с заменой контента по текстовым полям + замена картинок -->
+
+<script>
+//   имитация кнопок табов, в кнопки два текстового поля + shape в качестве фона
+  const button1 = ['.tn-elem__2823281591614953716570', '.tn-elem__2823281591613165018141', '.tn-elem__2823281591613167607069'];
+  const button2 = ['.tn-elem__2823281591614953688998', '.tn-elem__2823281591613164240370', '.tn-elem__2823281591613164493128'];
+  const button3 = ['.tn-elem__2823281591614953722732', '.tn-elem__2823281591613165059636', '.tn-elem__2823281591613167637523'];
+  const buttonsSelectors = button1.concat(button2, button3).join()
+
+// селекторы для подмены контента
+  const titleSelector = '[field="tn_text_1613165106060"]'
+  const priceSelector = '[field="tn_text_1613165755584"]'
+  const oldPriceSelector = '[field="tn_text_1613171007869"] del'
+  const profitSelector = '[field="tn_text_1613171637870"] span'
+  const imgSelector = '.tn-elem__2823281591614965012648 .tn-atom'
+  
+// используется в if для фильтрации какой стиль очистить
+  let currentSelector = '.tn-elem__2823281591614953716570';
+
+// контент для подмены, ссылка берётся с загруженных картинок внутрь зеро блока
+  const currency = 'ГРН'
+  const products = {
+      'product1': {
+          'title': 'HOME YUMMY',
+          'price': 385,
+          'oldPrice': 550,
+          'img': 'https://thumb.tildacdn.com/tild6661-3738-4133-b138-656633393866/-/cover/452x450/center/center/-/format/webp/2x___1.jpg'
+      },
+      'product2': {
+          'title': 'HOME YUMMY',
+          'price': 250,
+          'oldPrice': 550,
+          'img': 'https://thumb.tildacdn.com/tild3162-6439-4730-b838-353231623137/-/cover/452x450/center/center/-/format/webp/3sdf.jpg'
+      },
+      'product3': {
+          'title': 'HOME YUMMY',
+          'price': 450,
+          'oldPrice': 550,
+          'img': "https://thumb.tildacdn.com/tild3737-3837-4631-a436-393662376666/-/cover/452x450/center/center/-/format/webp/2.jpg"
+      },
+  }
+  
+// получение профита из текущей и старой цены, используется в changeContent
+  function getProfit(product) {
+      return product.oldPrice - product.price
+  }
+
+// подмена контента, используется после клика по любому из селекторов в button
+  function changeContent(product) {
+      $( titleSelector ).html( product.title );
+      $( priceSelector ).html( `${product.price} ${currency}` );
+      $( oldPriceSelector ).html( `<s>${product.oldPrice} ${currency}</s>` );
+      $( profitSelector ).html( `${getProfit(product)} ${currency}` );
+      $( imgSelector ).css('background-image', `url(${product.img})`);
+
+  }
+
+// инлайн стили для селекторов в button, применяются при клике или наведении 
+  function setTabStyle(buttonSelectors) {
+      // 0 shape, 1 title, 2 subtitle 
+      $(`${buttonSelectors[0]} .tn-atom`).css({'background-color': '#00402e', 'transition': '.3s'})
+      $(`${buttonSelectors[1]} .tn-atom`).css({'color': '#f4c918', 'transition': '.3s'})
+      $(`${buttonSelectors[2]} .tn-atom`).css({'color': '#ffffff', 'transition': '.3s'})
+      // console.log(`${buttonSelectors[0]} .tn-atom`)
+  }
+
+// очистка стиля после выхода курсора за область шейпа,
+  function removeTabStyle(buttonSelectors) {
+      if (buttonSelectors[0] === currentSelector) {
+        // игнорируем, если это активный таб
+      } else {
+          $(`${buttonSelectors[0]} .tn-atom`).css({'background-color': '#eaedef', 'transition': '.3s'})
+          $(`${buttonSelectors[1]} .tn-atom`).css({'color': '#00412f', 'transition': '.3s'})
+          $(`${buttonSelectors[2]} .tn-atom`).css({'color': '#09000a', 'transition': '.3s'})
+      }
+  }
+
+// после клика по кнопке, ставим текущий таб как активный 
+//   + следом очистка, смена контента, установка стиля
+//   в качестве опции логер
+//   важно, currentSelector должен быть первым для корректной работы
+  function actionAfterClickTab(product, button, log) {
+
+      currentSelector = button[0]
+      removeTabStyle(button1)
+      removeTabStyle(button2)
+      removeTabStyle(button3)
+      changeContent(product)
+      setTabStyle(button)
+      if (log) {
+          console.log(log)
+      }
+  }
+
+// установка первой вкладки, как активная + делаем всем селекторам у табов курсор пальца
+// было лениво выносить в css = ) 
+  function intitializeTabStyleAfterLoad() {
+      setTabStyle(button1)
+      button1.concat(button2, button3).forEach(el => $(`${el} .tn-atom`).css('cursor', 'pointer'))
+  }
+
+// слушаем клики по всем селекторам button1..2..3 и далее определяем к какому button относится селектор в таргете 
+  $(document).on('click', buttonsSelectors, function(e) { 
+      let targetSelector = `.${e.currentTarget.className.split(' ')[2]}`;
+
+      if (button1.indexOf( targetSelector ) != -1) {
+          actionAfterClickTab(products.product1, button1)
+      }
+
+      if (button2.indexOf( targetSelector ) != -1) {
+          actionAfterClickTab(products.product2, button2)
+      }
+
+      if (button3.indexOf( targetSelector ) != -1) {
+          actionAfterClickTab(products.product3, button3)
+      }
+   });
+
+// имитация hover эффекта в случае когда несколько элементов над шейпом и не чего их не оборачивает, 
+//   в этом случае при заходе курсора над шейпом делаем активные стили с
+  $(document).on('mouseenter', `${button1.join()}`, function(eHoverBut1) { setTabStyle(button1) });
+  $(document).on('mouseenter', `${button2.join()}`, function(eHoverBut2) { setTabStyle(button2) });
+  $(document).on('mouseenter', `${button3.join()}`, function(eHoverBut3) { setTabStyle(button3) });
+  
+// при выходе за область шейпа чистим стили
+  $(document).on('mouseleave', `${button1.join()}`, function(eHoverLeaveBut1) { removeTabStyle(button1) });
+  $(document).on('mouseleave', `${button2.join()}`, function(eHoverLeaveBut2) { removeTabStyle(button2) });
+  $(document).on('mouseleave', `${button3.join()}`, function(eHoverLeaveBut3) { removeTabStyle(button3) });
+
+// инициализируем
+  intitializeTabStyleAfterLoad()
+</script>
