@@ -49,10 +49,12 @@ $(document).ready(function() {
     $(allBlocks[0][0]).show() // показать первый блок при загрузке
 
     $(document).on('click', getString(blocksId), function(showTab) { // событие срабатывает при клике на любой из перечисленных блоков getString(blocksId)
+        // если нужно слушать события внутри одного блока замените getString(blocksId) на id блока в котором находятся кнопки "#tildablockid"
         let target = showTab.target; // где был клик?
         if (target.className != 'tn-atom') return; //если клик был не по вкладке, прерываем
         
         let tabHref = $(target).attr("href"); // получаем ссылку кнопки
+        // let tabHref = $(target).parent().attr("href"); // если вместо кнопки используется шейп с фоновой картинкой
         for (let i = 0; i < blocksId.length; i++) { // перебираем массив
             if (tabHref == allBlocks[i][1]) { // если ссылка есть в массиве
                 $(getString(blocksId)).hide() // скрываем все
