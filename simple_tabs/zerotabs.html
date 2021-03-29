@@ -15,10 +15,10 @@
     }
 
 // определяем блок в котором будут кнопки табов
-let blockButtonsForTabs = '#rec115194752 .tn-elem[data-elem-type="button"]';
+const blockButtonsForTabs = '#rec115194752 .tn-elem[data-elem-type="button"]';
 
 // первая активная кнопка
-let firstTab = '.tn-elem[data-elem-id="1562702369030"] .tn-atom';
+const firstTab = '.tn-elem[data-elem-id="1562702369030"] .tn-atom';
 
 //Все блоки которые учавствуют в табах (НЕ блок с вкладками)
 
@@ -48,7 +48,12 @@ $(document).on('click', blockButtonsForTabs, function(tabButton) {
       $('.tn-atom').removeClass('active-tab');
       $(target).addClass('active-tab');
 
-//проверяем содержимое текста кнопки и в зависимости от совпадения скрываем блоки и показываем нужный
+// проверяем содержимое текста кнопки и в зависимости от совпадения скрываем блоки и показываем нужный
+// обратите внимание такая проверка чувствительна к регистру, 
+// любой закравшийся символ в проверку case или саму кнопку может приводить к ошибкам
+// как правило подобные отслеживания где был клик проводятся через target с получением конкретного атрибута элемента
+// вариант крайне упрощённый и не стабилен, но пригоден если вы отладили и больше не меняете значения в кнопках
+
       switch (targetText) {
         case 'ТекстКнопки0':
             $(getString(blocks_id)).hide();
@@ -78,9 +83,3 @@ $(document).on('click', blockButtonsForTabs, function(tabButton) {
 
 });
 </script>
-<!-- user1 -->
-<<<<<<< HEAD
-<!-- user1 coment2 -->
-=======
-<!-- user2 comment-->
->>>>>>> 82431b158d1ee02345bcb652a4fe4006a8db4628
