@@ -1,0 +1,321 @@
+<style>
+
+.t-item:before {
+  position: relative;
+}
+.favorite:before {
+  position: relative;
+  background: #d8d8d8;
+  left: 0px;
+  top: 45px;
+  padding: 10px;
+  content: " ";
+  z-index: 900;
+  display: block;
+  width: 25px;
+  height: 25px;
+  background-image: url(https://static.tildacdn.com/tild6265-3437-4037-b836-303532303563/icons8-like.svg);
+  background-repeat: no-repeat;
+  background-size: 50%;
+  background-position: center;
+  transition: .3s;
+}
+
+.favorite:hover:before, .added-in-favorite:before {
+  position: relative;
+  background: #d8d8d8;
+  left: 0px;
+  top: 45px;
+  padding: 10px;
+  content: " ";
+  z-index: 10000;
+  display: block;
+  width: 25px;
+  height: 25px;
+  background-image: url(https://static.tildacdn.com/tild6436-6535-4462-b962-383730343335/icons8-like.svg);
+  background-repeat: no-repeat;
+  background-size: 50%;
+  background-position: center;
+  cursor: pointer;
+  transition: .3s;
+}
+
+.favorite-item-remove {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  background: #dedede;
+  padding: 4px;
+  background-repeat: no-repeat;
+  background-size: 66%;
+  background-position: center;
+  cursor: pointer;
+  background-image: url(https://static.tildacdn.com/tild6435-6438-4333-b330-656533643837/icons8-__broken_hear.svg);
+  z-index: 100500;
+  width: 10px;
+  height: 10px;
+
+  transition: .3s;
+}
+
+.favorite-item-remove:hover {
+  background-image: url(https://static.tildacdn.com/tild3231-6161-4464-a564-623538383333/icons8-__broken_hear.svg);
+  transition: .3s;
+}
+
+.tn-elem__2765661341612630202158:hover {
+    cursor: pointer;
+    opacity: 0.8;
+}
+.favorite-counter {
+  display: block;
+  top: 13px;
+  right: -6px;
+  position: absolute;
+  background: #ebebeb;
+  border-radius: 11px;
+  padding: 3px;
+  text-align: center;
+  line-height: 1;
+  color: #3d3d3d;
+  font-size: 8px;
+  font-family: 'Mediator',Arial,sans-serif;
+  font-weight: 600;
+  background-position: center center;
+  border-color: transparent;
+  border-style: solid;
+}
+
+.favo-list {
+  width: 300px;
+  position: fixed;
+  right: 550px;
+  top: 109px;
+  box-shadow: 0px 46px 50px 0px #00000059;
+  z-index: 99999;
+  background: #fff;
+  border-radius: 3px;
+  display: none;
+  transition: 0.3s;
+  flex-direction: column;
+  height: 300px;
+  overflow: scroll;
+}
+
+.favo-list a {
+  color: #333;
+  text-decoration: none;
+  display: flex;
+  padding: 10px;
+  border-radius: 5px;
+  background: #f5f5f5;
+  margin: 10px;
+}
+.favorite-item-container {
+  position: relative;
+}
+
+.card-bg-img {
+  width: 50px;
+  height: 30px;
+  background-size: cover;
+  border-radius: 3px;
+  margin: 5px;
+  padding: 5px;
+  flex: 0 1 auto;
+}
+
+.fav-card-text-wraper {
+  margin-left: 10px;
+  padding: 5px;
+  flex: 0 1 auto;
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+}
+
+.fav-card-text-wraper span:nth-child(2){
+  margin-top: 5px;
+}
+
+</style>
+
+<script>
+
+function setLocalStorage(items) {
+  localStorage.setItem('favorite', JSON.stringify(Array.from(items)))
+}
+
+function getLocalStorage() {
+   let items = JSON.parse(localStorage.getItem('favorite'));
+   return new Set(items)
+}
+
+// если у карточки нет класса favo-ok добавляем в карточку кнопку избранного
+function prependFavorite() {
+  $('.t-store__card:not(.favo-ok)').addClass("favo-ok").prepend('<div class="favorite"></div>');
+}
+
+// Добавляем кнопку избранного при каждом окончании ajax запроса
+// Так как кнопку нужно добавлять и после фильтрации и при нажатии загрузить ещё
+  $(document).ajaxComplete(function(){
+    prependFavorite()
+    checkedFavoridCard()
+  });
+
+function templateFavoriteItem(item){
+  return `
+        <div class="favorite-item-container" favorUID="${item.productUid}">
+        <div class="favorite-item-remove" remove-uid="${item.productUid}"></div>
+          <a href="${item.hRef}">
+              <div class="card-bg-img" style="background-image: url(${item.cardBgImg})"></div>
+              <div class="fav-card-text-wraper">
+                <span>${item.cardTitle}</span>
+                <span>${item.cardPrice}</span>
+              </div>
+              
+          </a>
+        </div>
+        `
+}
+
+
+function setFavoriteCounter(count) {
+  $('.tn-elem__2765661341612630202158 .tn-atom:not(.count-ok)').addClass("count-ok").prepend(`<div class="favorite-counter">${count}</div>`)
+  $('.favorite-counter').text(count)
+}
+
+function loadFavoriteList() {
+    $('.favo-list').empty()
+    let favoritList = getLocalStorage()
+    let xx = Array.from(favoritList)
+    if (favoritList) {
+      for (var i = 0; i < xx.length; i++) {
+        let item = templateFavoriteItem(xx[i])
+        $('.favo-list').prepend(item)
+        
+      }
+    }
+    setFavoriteCounter(xx.length)
+}
+
+function checkedFavoridCard(){
+  list = getLocalStorage()
+  for (let item of list) {
+    $(`[data-product-uid="${item.productUid}"] .favorite`).addClass('added-in-favorite')
+  }
+}
+
+function initFavorite() {
+  $('body:not(.favo-list-ok)').addClass('favo-list-ok').prepend('<div class="favo-list"></div>');
+   loadFavoriteList()
+}
+
+
+function addInStorageList(item) {
+  
+  let favoritList = getLocalStorage()
+  if (favoritList) {
+    favoritList.add(item)
+    setLocalStorage(favoritList)
+  } else {
+    let map = new Set()
+    setLocalStorage(map)
+  }
+}
+
+function removeInStorageList(uid) {
+  
+  let favoritList = getLocalStorage()
+  console.log(favoritList.size)
+  if (favoritList) {
+    favoritList.forEach(function(item){
+      if(item.productUid == uid){
+          favoritList.delete(item)
+      }
+    })
+    setLocalStorage(favoritList)
+  }
+
+  setFavoriteCounter(favoritList.size)
+  $(`[data-product-uid="${uid}"] div`).removeClass('added-in-favorite')
+  $(`[favorUID="${uid}"]`).remove()
+}
+
+
+
+
+$(document).ready(function(){
+    initFavorite()
+   
+});
+
+
+$(document).on('click', '.favorite-item-remove', function(favoriteRemove) {
+  console.log('click')
+  let target = favoriteRemove.target; 
+  console.log(target.className)
+  
+  if (target.className == 'favorite-item-remove') {
+       let uid = $(target).attr("remove-uid");
+       removeInStorageList(uid)
+  }
+
+});
+
+$(document).on('click', '.favorite', function(favorite) {
+  console.log('click')
+  let target = favorite.target; 
+  console.log(target.className)
+  let card = target.parentElement
+  let productUid = $(card).attr("data-product-uid");
+
+  if (target.className == 'favorite added-in-favorite') {
+       $(target).removeClass("added-in-favorite");
+       removeInStorageList(productUid)
+
+  } else {
+      $(target).addClass("added-in-favorite");
+      
+    //   Парсинг карточки
+      
+      let hRef = $(`[data-product-uid='${productUid}'] a`).attr("href");
+      let cardTitle = $(`[data-product-uid='${productUid}'] a .t-store__card__textwrapper .t-store__card__title`).text();
+      let cardPrice = $(`[data-product-uid='${productUid}'] a .t-store__card__textwrapper .t-store__card__price-wrapper .t-store__card__price-item .t-store__card__price-value`).text();
+      let cardCurrency = $(`[data-product-uid='${productUid}'] a .t-store__card__textwrapper .t-store__card__price-wrapper .t-store__card__price-item .t-store__card__price-currency`).text()[0];
+
+
+      let cardBgImg = ''
+      let bgImg = $(`[data-product-uid='${productUid}'] a .t-store__card__imgwrapper .t-store__card__bgimg`).css('background-image');
+      if (bgImg) {
+        cardBgImg = bgImg.split('"')[1];
+      }
+      
+    let cardData = {
+        'productUid': productUid, 
+        'hRef': hRef, 
+        'cardTitle': cardTitle, 
+        'cardPrice': `${cardPrice} ${cardCurrency}`,
+        'cardBgImg': `${cardBgImg}`
+    }
+    addInStorageList(cardData)
+    loadFavoriteList()
+  };
+
+});
+
+
+
+$('.tn-elem__2765661341612630202158 .tn-atom img').click( function() {
+  $('.favo-list').css('display', 'flex');
+});
+
+$(document).mouseup(function (e) {
+    var container = $(".favo-list");
+    if (container.has(e.target).length === 0){
+        container.hide();
+    }
+});
+
+
+</script>
