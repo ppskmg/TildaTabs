@@ -52,7 +52,7 @@ $(document).ready(function() {
         // если нужно слушать события внутри одного блока замените getString(blocksId) на id блока в котором находятся кнопки "#tildablockid"
         let target = showTab.target; // где был клик?
 
-        // если вместо кнопки используется шейп с фоновой картинкой, заменить класс tn-atom на tn-atom__img
+        // if (target.className != 'tn-atom__img') return;  // если вместо кнопки используется шейп с фоновой картинкой
         if (target.className != 'tn-atom') return; //если клик был не по вкладке, прерываем
 
         
