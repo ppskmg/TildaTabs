@@ -44,7 +44,7 @@ $(document).ready(function() {
         ['#rec195494918', '#stage_tab12']]
 
 
-    blocksId = getBlocksId(allBlocks) // получаем массив с id блоков
+    let blocksId = getBlocksId(allBlocks) // получаем массив с id блоков
     $(getString(blocksId)).hide() //скрываем все блоки
     $(allBlocks[0][0]).show() // показать первый блок при загрузке
 
